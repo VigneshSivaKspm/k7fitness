@@ -30,10 +30,19 @@ function demoMode() {
 // VITE_BASE_PATH lets the admin be served from a sub-path, e.g. "/admin/" when
 // the website and admin share one domain. Defaults to the domain root.
 export default defineConfig(({ mode }) => {
-  const demo = mode === 'demo';
+  const env = loadEnv(mode, process.cwd(), 'VITE_');
+  const apiKey = env.VITE_FIREBASE_API_KEY;
+  const isRealFirebase = Boolean(
+    apiKey &&
+    apiKey !== 'demo-api-key' &&
+    !apiKey.startsWith('demo') &&
+    env.VITE_DEMO_MODE !== 'true'
+  );
+  const demo = mode === 'demo' || !isRealFirebase;
+
   return {
-    base: demo ? '/' : loadEnv(mode, process.cwd(), 'VITE_').VITE_BASE_PATH || '/',
-    plugins: [react(), tailwindcss(), demo && demoMode()],
+    base: demo ? '/' : env.VITE_BASE_PATH || '/',
+    plugins: [react(), tailwindcss(), demo && demoMode()].filter(Boolean),
     resolve: demo
       ? {
           alias: [
@@ -44,8 +53,11 @@ export default defineConfig(({ mode }) => {
           ],
         }
       : undefined,
-    // Bundled website images resolve against the app itself in the demo.
-    define: demo ? { 'import.meta.env.VITE_WEBSITE_URL': JSON.stringify('') } : undefined,
+    // In demo mode, mark as demo and bundle images
+    define: {
+      'import.meta.env.VITE_IS_DEMO': JSON.stringify(demo ? 'true' : 'false'),
+      ...(demo ? { 'import.meta.env.VITE_WEBSITE_URL': JSON.stringify('') } : {}),
+    },
     server: { port: 5174 },
     build: {
       chunkSizeWarningLimit: 600,

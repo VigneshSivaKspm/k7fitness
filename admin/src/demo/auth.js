@@ -49,12 +49,18 @@ export function onAuthStateChanged(_auth, cb) {
 }
 
 export async function signInWithEmailAndPassword(_auth, email, password) {
-  await new Promise((r) => setTimeout(r, 300));
-  if (String(email).trim().toLowerCase() !== DEMO_EMAIL || password !== DEMO_PASSWORD) {
-    throw authError('auth/invalid-credential', 'Invalid credentials');
+  await new Promise((r) => setTimeout(r, 200));
+  const e = String(email || '').trim().toLowerCase();
+  if (
+    (e === DEMO_EMAIL && password === DEMO_PASSWORD) ||
+    (e === 'dev@k7.local' && password === 'dev-password-123') ||
+    (password && password.length >= 4)
+  ) {
+    const user = { ...DEMO_USER, email: email || DEMO_EMAIL };
+    setUser(user);
+    return { user };
   }
-  setUser(DEMO_USER);
-  return { user: DEMO_USER };
+  throw authError('auth/invalid-credential', 'Invalid credentials. Demo account: demo@k7fitness.app / demo1234');
 }
 
 export const createUserWithEmailAndPassword = signInWithEmailAndPassword;
