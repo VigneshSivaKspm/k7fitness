@@ -41,10 +41,21 @@
   }
 }
 
+/* Safe areas: Capacitor (Android app) injects --safe-area-inset-*; browsers use env(). */
+:root {
+  --sa-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
+  --sa-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
+  --sa-left: var(--safe-area-inset-left, env(safe-area-inset-left, 0px));
+  --sa-right: var(--safe-area-inset-right, env(safe-area-inset-right, 0px));
+  /* Height of the mobile bottom tab bar (without the safe area). */
+  --tabbar-h: 4rem;
+}
+
 @layer base {
-  html { -webkit-text-size-adjust: 100%; }
+  html { -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; }
   body {
     @apply bg-canvas font-sans text-zinc-900 antialiased;
+    overscroll-behavior-y: none;
   }
   ::selection { background: var(--color-brand); color: #fff; }
   :focus-visible {
@@ -65,6 +76,11 @@
       hover:border-zinc-400 focus:border-brand focus:ring-4 focus:ring-brand/10
       disabled:cursor-not-allowed disabled:bg-zinc-50 disabled:text-zinc-500
       aria-[invalid=true]:border-red-500 aria-[invalid=true]:focus:ring-red-500/10;
+  }
+  /* Phones: 16px text (no zoom-on-focus, easier to read) and 44px touch targets. */
+  @media (max-width: 639px) {
+    .input { font-size: 1rem; }
+    input.input:not([type='checkbox']):not([type='radio']), select.input { min-height: 2.75rem; }
   }
   select.input {
     @apply appearance-none bg-[url('data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%2212%22%20height=%2212%22%20fill=%22none%22%20stroke=%22%2371717a%22%20stroke-width=%222%22%3E%3Cpath%20d=%22M2%204l4%204%204-4%22/%3E%3C/svg%3E')] bg-[position:right_0.85rem_center] bg-no-repeat pr-9;
@@ -92,6 +108,14 @@
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { scrollbar-width: none; }
 .tabular { font-variant-numeric: tabular-nums; }
+.pb-safe { padding-bottom: var(--sa-bottom); }
+.pt-safe { padding-top: var(--sa-top); }
+
+/* Mobile app shell: hide the tab bar while the on-screen keyboard is open. */
+@media (max-width: 1023px) {
+  html[data-keyboard='open'] .mobile-tabbar { display: none; }
+  html[data-keyboard='open'] .form-actions { bottom: 0; }
+}
 
 /* ── Print: receipts, workout & diet charts ─────────────────────────── */
 @media print {

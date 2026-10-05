@@ -64,7 +64,7 @@ export default function Reports() {
   const exportTrainees = () =>
     run('trainees', async () => {
       const rows = await fetchAllTrainees();
-      downloadCsv(`trainees-${todayInput()}.csv`, [
+      await downloadCsv(`trainees-${todayInput()}.csv`, [
         { header: 'Member ID', value: (t) => t.memberId },
         { header: 'Name', value: (t) => t.fullName },
         { header: 'Phone', value: (t) => t.phone },
@@ -91,7 +91,7 @@ export default function Reports() {
       const t = parseDateInput(to);
       if (!f || !t || t < f) throw Object.assign(new Error('Choose a valid date range.'), { userFacing: true });
       const rows = await fetchPaymentsInRange(startOfDay(f), endOfDay(t));
-      downloadCsv(`payments-${from}-to-${to}.csv`, [
+      await downloadCsv(`payments-${from}-to-${to}.csv`, [
         { header: 'Receipt No', value: (p) => p.receiptNo },
         { header: 'Date', value: (p) => toDateInput(p.paymentDate) },
         { header: 'Member ID', value: (p) => p.memberId },
@@ -113,7 +113,7 @@ export default function Reports() {
         listByExpiry({ from: null, to: new Date(startOfDay().getTime() - 1), max: 1000 }),
       ]);
       const rows = [...expired.items, ...upcoming.items];
-      downloadCsv(`renewals-${todayInput()}.csv`, [
+      await downloadCsv(`renewals-${todayInput()}.csv`, [
         { header: 'Member ID', value: (t) => t.memberId },
         { header: 'Name', value: (t) => t.fullName },
         { header: 'Phone', value: (t) => t.phone },

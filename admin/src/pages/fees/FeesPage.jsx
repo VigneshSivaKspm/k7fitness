@@ -174,7 +174,7 @@ function Payments() {
     setExporting(true);
     try {
       const rows = await fetchPaymentsInRange(bounds.from, bounds.to);
-      downloadCsv(`payments-${toDateInput(bounds.from)}-to-${toDateInput(bounds.to)}.csv`, [
+      await downloadCsv(`payments-${toDateInput(bounds.from)}-to-${toDateInput(bounds.to)}.csv`, [
         { header: 'Receipt No', value: (p) => p.receiptNo },
         { header: 'Date', value: (p) => toDateInput(p.paymentDate) },
         { header: 'Member ID', value: (p) => p.memberId },

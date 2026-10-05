@@ -1,3 +1,5 @@
+import { saveTextFile } from '../native/platform';
+
 function escapeCell(value) {
   const s = value === null || value === undefined ? '' : String(value);
   // Neutralise spreadsheet formula injection.
@@ -6,6 +8,7 @@ function escapeCell(value) {
 }
 
 /**
+ * Downloads (browser) or shares (Android app) a CSV file.
  * @param {string} filename
  * @param {Array<{ header: string, value: (row) => any }>} columns
  * @param {Array<object>} rows
@@ -13,13 +16,6 @@ function escapeCell(value) {
 export function downloadCsv(filename, columns, rows) {
   const lines = [columns.map((c) => escapeCell(c.header)).join(',')];
   for (const row of rows) lines.push(columns.map((c) => escapeCell(c.value(row))).join(','));
-  const blob = new Blob([`﻿${lines.join('\r\n')}`], { type: 'text/csv;charset=utf-8' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  // BOM so Excel opens UTF-8 (₹, names) correctly.
+  return saveTextFile(filename, `﻿${lines.join('\r\n')}`, 'text/csv');
 }

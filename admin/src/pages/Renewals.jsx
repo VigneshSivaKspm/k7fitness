@@ -17,6 +17,7 @@ import { useSettings } from '../context/SettingsContext';
 import { useToast } from '../context/ToastContext';
 import { addDays, daysUntil, endOfDay, formatDate, startOfDay, toDateInput } from '../utils/dates';
 import { formatPhone, telLink } from '../utils/format';
+import { friendlyError } from '../utils/errors';
 import { downloadCsv } from '../utils/csv';
 
 const BUCKETS = [
@@ -67,17 +68,21 @@ export default function Renewals() {
     counts.reload({ silent: true });
   };
 
-  const exportCsv = () => {
-    downloadCsv(`renewals-${bucket.value}-${toDateInput(new Date())}.csv`, [
-      { header: 'Member ID', value: (t) => t.memberId },
-      { header: 'Name', value: (t) => t.fullName },
-      { header: 'Phone', value: (t) => t.phone },
-      { header: 'Plan', value: (t) => t.currentPlanName },
-      { header: 'Expiry', value: (t) => toDateInput(t.membershipExpiry) },
-      { header: 'Days remaining', value: (t) => daysUntil(t.membershipExpiry) },
-      { header: 'Outstanding', value: (t) => t.pendingAmount || 0 },
-    ], list.items);
-    toast.success('Renewal list exported.');
+  const exportCsv = async () => {
+    try {
+      await downloadCsv(`renewals-${bucket.value}-${toDateInput(new Date())}.csv`, [
+        { header: 'Member ID', value: (t) => t.memberId },
+        { header: 'Name', value: (t) => t.fullName },
+        { header: 'Phone', value: (t) => t.phone },
+        { header: 'Plan', value: (t) => t.currentPlanName },
+        { header: 'Expiry', value: (t) => toDateInput(t.membershipExpiry) },
+        { header: 'Days remaining', value: (t) => daysUntil(t.membershipExpiry) },
+        { header: 'Outstanding', value: (t) => t.pendingAmount || 0 },
+      ], list.items);
+      toast.success('Renewal list exported.');
+    } catch (err) {
+      toast.error(friendlyError(err));
+    }
   };
 
   const actions = (t) => (

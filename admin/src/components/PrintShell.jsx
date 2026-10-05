@@ -3,6 +3,7 @@ import { ArrowLeft, Printer } from 'lucide-react';
 import Button from './ui/Button';
 import { useSettings } from '../context/SettingsContext';
 import { assetUrl } from '../utils/format';
+import { printPage } from '../native/platform';
 
 /** A4-style printable page with a branded letterhead and on-screen toolbar. */
 export default function PrintShell({ title, subtitle, children, footer }) {
@@ -10,13 +11,13 @@ export default function PrintShell({ title, subtitle, children, footer }) {
   const { business, gymName } = useSettings();
 
   return (
-    <div className="min-h-svh bg-zinc-100 py-4 sm:py-8 print:bg-white print:py-0">
+    <div className="min-h-svh bg-zinc-100 pt-[calc(1rem+var(--sa-top))] pb-[calc(1rem+var(--sa-bottom))] sm:py-8 print:bg-white print:py-0">
       <div className="no-print mx-auto mb-4 flex max-w-3xl items-center justify-between gap-2 px-4">
         <Button variant="secondary" icon={ArrowLeft} onClick={() => navigate(-1)}>
           Back
         </Button>
-        <Button icon={Printer} onClick={() => window.print()}>
-          Print
+        <Button icon={Printer} onClick={() => printPage(title)}>
+          Print / PDF
         </Button>
       </div>
       <article className="print-area mx-auto max-w-3xl bg-white shadow-card sm:rounded-2xl">
