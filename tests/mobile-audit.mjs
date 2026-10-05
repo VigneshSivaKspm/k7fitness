@@ -76,7 +76,18 @@ if (!ONLY) {
   await page.goto(`${ADMIN}/dashboard`, { waitUntil: 'domcontentloaded' });
   await page.waitForTimeout(800);
   await page.getByRole('button', { name: /open menu/i }).click();
-  await audit('drawer', 'm-drawer');
+  await audit('drawer', null);
+  await page.screenshot({ path: `${SHOTS}/v-drawer.png` });
+  await page.keyboard.press('Escape');
+  await page.getByRole('button', { name: /quick actions/i }).click();
+  await audit('quick actions', null);
+  await page.screenshot({ path: `${SHOTS}/v-quick.png` });
+  // Viewport shots: fixed header / tab bar / sticky form bar where the user sees them.
+  for (const path of ['/trainees', '/trainees/new', '/workouts/new', '/diets/new']) {
+    await page.goto(`${ADMIN}${path}`, { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(1500);
+    await page.screenshot({ path: `${SHOTS}/v${path.replace(/\//g, '-')}.png` });
+  }
 }
 
 console.log(problems.length ? problems.join('\n') : `No overflow or page errors at ${W}px.`);

@@ -1,6 +1,7 @@
 import { Link } from 'react-router';
 import {
   ArrowRight,
+  CalendarCheck,
   CalendarClock,
   CalendarX,
   IndianRupee,
@@ -25,10 +26,11 @@ import { listByExpiry, listWithDues, recentTrainees } from '../services/traineeS
 import { recentPayments } from '../services/paymentService';
 import { recentEnquiries } from '../services/enquiryService';
 import { listPlans } from '../services/membershipService';
+import { getDailyCounts } from '../services/attendanceService';
 import { useAsync, useDocumentTitle } from '../hooks/useAsync';
 import { useAuth } from '../context/AuthContext';
 import { useSettings } from '../context/SettingsContext';
-import { addDays, endOfDay, formatDate, formatMonth, relativeDays, startOfDay, timeAgo } from '../utils/dates';
+import { addDays, endOfDay, formatDate, formatMonth, formatShortDate, relativeDays, startOfDay, timeAgo } from '../utils/dates';
 import { formatNumber } from '../utils/format';
 import { paymentMethodLabel } from '../constants/options';
 
@@ -81,6 +83,8 @@ export default function Dashboard() {
   const payments = useAsync(() => recentPayments(6), []);
   const members = useAsync(() => recentTrainees(5), []);
   const enquiries = useAsync(() => recentEnquiries(5), []);
+  const attendance = useAsync(() => getDailyCounts(14), []);
+  const presentToday = attendance.data?.at(-1)?.value;
 
   const s = stats.data || {};
   const kpis = [
@@ -126,6 +130,24 @@ export default function Dashboard() {
           ))}
         </div>
       )}
+
+      <Card
+        title="Attendance"
+        description={presentToday === undefined ? 'Check-ins, last 14 days' : `${formatNumber(presentToday)} checked in today · last 14 days`}
+        actions={
+          <Link to="/attendance" className="inline-flex items-center gap-1 text-[0.8rem] font-semibold text-brand hover:underline">
+            <CalendarCheck className="size-3.5" /> Mark attendance
+          </Link>
+        }
+      >
+        {attendance.error ? (
+          <ErrorState message={attendance.error} onRetry={attendance.reload} />
+        ) : attendance.loading ? (
+          <SkeletonRows rows={2} />
+        ) : (
+          <BarChart data={attendance.data.map((d) => ({ label: formatShortDate(d.date), value: d.value }))} format={formatNumber} height={140} />
+        )}
+      </Card>
 
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-2 [&>*]:min-w-0">
         <ListCard title="Upcoming renewals" to="/renewals" state={renewals} empty={`No memberships expire in the next ${alertDays} days.`}>

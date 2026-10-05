@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
+import { pushBackHandler } from '../../native/backStack';
 
 const SIZES = { sm: 'sm:max-w-md', md: 'sm:max-w-lg', lg: 'sm:max-w-2xl', xl: 'sm:max-w-4xl' };
 const FOCUSABLE = 'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -50,7 +51,9 @@ export default function Modal({ open, onClose, title, description, icon, size = 
       }
     };
     document.addEventListener('keydown', onKey);
+    const popBack = pushBackHandler(() => onCloseRef.current?.());
     return () => {
+      popBack();
       clearTimeout(timer);
       document.removeEventListener('keydown', onKey);
       document.body.style.overflow = prevOverflow;
@@ -61,7 +64,7 @@ export default function Modal({ open, onClose, title, description, icon, size = 
   if (!open) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-[70] flex items-end justify-center sm:items-center sm:p-4" role="presentation">
+    <div className="pt-safe fixed inset-0 z-[70] flex items-end justify-center sm:items-center sm:p-4" role="presentation">
       <div className="animate-fade-in absolute inset-0 bg-zinc-950/55 backdrop-blur-[2px]" onClick={onClose} />
       <As
         ref={panelRef}
@@ -100,13 +103,13 @@ export default function Modal({ open, onClose, title, description, icon, size = 
             </button>
           </div>
         )}
-        <div className="flex-1 overflow-y-auto px-5 pb-5 sm:px-6">{children}</div>
+        <div className="flex-1 overscroll-contain overflow-y-auto px-5 pb-5 sm:px-6">{children}</div>
         {footer && (
-          <div className="flex flex-col-reverse gap-2 border-t border-zinc-100 bg-zinc-50/60 px-5 py-4 sm:flex-row sm:justify-end sm:rounded-b-2xl sm:px-6 [&>*]:w-full sm:[&>*]:w-auto">
+          <div className="flex gap-2 border-t border-zinc-100 bg-zinc-50/60 px-4 py-3 sm:justify-end sm:rounded-b-2xl sm:px-6 sm:py-4 flex-wrap max-sm:[&>*]:h-12 max-sm:[&>*]:flex-auto">
             {footer}
           </div>
         )}
-        <div style={{ height: 'env(safe-area-inset-bottom)' }} className="sm:hidden" />
+        <div className="pb-safe sm:hidden" />
       </As>
     </div>,
     document.body,

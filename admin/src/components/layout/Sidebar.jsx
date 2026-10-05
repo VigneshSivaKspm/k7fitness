@@ -9,7 +9,7 @@ import Avatar from '../ui/Avatar';
 import { ADMIN_ROLES } from '../../constants/options';
 
 const itemCls = ({ isActive }) =>
-  `group relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-[0.875rem] font-medium transition ${
+  `group relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-[0.875rem] font-medium transition max-lg:py-3 ${
     isActive ? 'bg-brand/15 text-white' : 'text-zinc-400 hover:bg-white/[0.04] hover:text-white'
   }`;
 
@@ -30,7 +30,7 @@ function NavGroup({ item, onNavigate }) {
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={expanded}
-        className={`relative flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-[0.875rem] font-medium transition ${
+        className={`relative flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-[0.875rem] font-medium transition max-lg:py-3 ${
           within ? 'text-white' : 'text-zinc-400 hover:bg-white/[0.04] hover:text-white'
         }`}
       >
@@ -47,7 +47,7 @@ function NavGroup({ item, onNavigate }) {
                 end={c.end}
                 onClick={onNavigate}
                 className={({ isActive }) =>
-                  `block rounded-md px-2.5 py-1.5 text-[0.82rem] transition ${isActive ? 'bg-brand/15 font-semibold text-white' : 'text-zinc-400 hover:text-white'}`
+                  `block rounded-md px-2.5 py-1.5 text-[0.82rem] transition max-lg:py-2.5 max-lg:text-[0.875rem] ${isActive ? 'bg-brand/15 font-semibold text-white' : 'text-zinc-400 hover:text-white'}`
                 }
               >
                 {c.label}

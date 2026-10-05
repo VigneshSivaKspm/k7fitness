@@ -130,7 +130,7 @@ export default function DietForm({ value, onChange, errors = {} }) {
           title={
             <span className="flex flex-wrap items-center gap-2">
               <input
-                className="input !h-9 !w-44 !py-1 font-semibold"
+                className="input !h-10 !w-40 !py-1 font-semibold sm:!w-44"
                 name={`meal-${meal.id}`}
                 value={meal.slot}
                 list="meal-slots"
@@ -138,7 +138,7 @@ export default function DietForm({ value, onChange, errors = {} }) {
                 aria-label="Meal name"
                 aria-invalid={Boolean(errors[`meal-${meal.id}`])}
               />
-              <input type="time" className="input !h-9 !w-32 !py-1" value={meal.time} onChange={(e) => updateMeal(i, { ...meal, time: e.target.value })} aria-label={`${meal.slot} time (optional)`} />
+              <input type="time" className="input !h-10 !w-32 !py-1" value={meal.time} onChange={(e) => updateMeal(i, { ...meal, time: e.target.value })} aria-label={`${meal.slot} time (optional)`} />
             </span>
           }
           actions={
@@ -163,20 +163,33 @@ export default function DietForm({ value, onChange, errors = {} }) {
           {meal.items.map((it, j) => {
             const setItem = (k) => (e) => updateMeal(i, { ...meal, items: meal.items.map((x) => (x.id === it.id ? { ...x, [k]: e.target.value } : x)) });
             const small = 'input !px-2.5 !py-2 text-sm';
+            const lbl = 'mb-1 block text-[0.7rem] font-semibold tracking-wide text-zinc-500 uppercase';
             return (
-              <div key={it.id} className="flex items-start gap-2 rounded-xl border border-zinc-200 bg-white p-3">
-                <div className="grid min-w-0 flex-1 gap-2 sm:grid-cols-2">
-                  <input className={small} name={`food-${it.id}`} placeholder="Food (e.g. Oats with milk)" value={it.food} onChange={setItem('food')} aria-label="Food" aria-invalid={Boolean(errors[`food-${it.id}`])} />
-                  <input className={small} placeholder="Quantity (e.g. 60 g / 1 bowl)" value={it.quantity} onChange={setItem('quantity')} aria-label="Quantity" />
-                  <input className={small} placeholder="Notes (optional)" value={it.notes} onChange={setItem('notes')} aria-label="Notes" />
-                  <input className={small} placeholder="Alternatives (optional)" value={it.alternatives} onChange={setItem('alternatives')} aria-label="Alternative foods" />
-                  {errors[`food-${it.id}`] && <p className="text-xs font-medium text-red-600 sm:col-span-2">{errors[`food-${it.id}`]}</p>}
+              <div key={it.id} className="rounded-xl border border-zinc-200 bg-white p-3">
+                <div className="flex items-center gap-2">
+                  <span className="flex size-7 shrink-0 items-center justify-center rounded-md bg-zinc-100 text-xs font-bold text-zinc-500">{j + 1}</span>
+                  <input className={`${small} min-w-0 flex-1 font-medium`} name={`food-${it.id}`} placeholder="Food (e.g. Oats with milk)" value={it.food} onChange={setItem('food')} aria-label="Food" aria-invalid={Boolean(errors[`food-${it.id}`])} />
+                  <div className="flex shrink-0 items-center">
+                    <ReorderButtons index={j} count={meal.items.length} onMove={(idx, dir) => updateMeal(i, { ...meal, items: moveItem(meal.items, idx, dir) })} label="food" />
+                    <button type="button" onClick={() => updateMeal(i, { ...meal, items: meal.items.filter((x) => x.id !== it.id) })} className="rounded-md p-2 text-zinc-400 hover:bg-red-50 hover:text-red-600" aria-label="Remove food">
+                      <X className="size-4" />
+                    </button>
+                  </div>
                 </div>
-                <div className="flex flex-col items-center">
-                  <ReorderButtons index={j} count={meal.items.length} onMove={(idx, dir) => updateMeal(i, { ...meal, items: moveItem(meal.items, idx, dir) })} label="food" />
-                  <button type="button" onClick={() => updateMeal(i, { ...meal, items: meal.items.filter((x) => x.id !== it.id) })} className="rounded-md p-1.5 text-zinc-400 hover:bg-red-50 hover:text-red-600" aria-label="Remove food">
-                    <X className="size-4" />
-                  </button>
+                {errors[`food-${it.id}`] && <p className="mt-1.5 text-xs font-medium text-red-600">{errors[`food-${it.id}`]}</p>}
+                <div className="mt-2.5 grid gap-2 sm:grid-cols-3">
+                  <label className="block min-w-0">
+                    <span className={lbl}>Quantity</span>
+                    <input className={small} placeholder="e.g. 60 g / 1 bowl" value={it.quantity} onChange={setItem('quantity')} />
+                  </label>
+                  <label className="block min-w-0">
+                    <span className={lbl}>Notes</span>
+                    <input className={small} placeholder="Optional" value={it.notes} onChange={setItem('notes')} />
+                  </label>
+                  <label className="block min-w-0">
+                    <span className={lbl}>Alternatives</span>
+                    <input className={small} placeholder="Optional" value={it.alternatives} onChange={setItem('alternatives')} />
+                  </label>
                 </div>
               </div>
             );

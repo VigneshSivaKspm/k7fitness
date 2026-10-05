@@ -11,6 +11,7 @@ const TraineeList = lazy(() => import('../pages/trainees/TraineeList'));
 const TraineeFormPage = lazy(() => import('../pages/trainees/TraineeFormPage'));
 const TraineeProfile = lazy(() => import('../pages/trainees/TraineeProfile'));
 const AssignmentEditor = lazy(() => import('../pages/trainees/AssignmentEditor'));
+const Attendance = lazy(() => import('../pages/Attendance'));
 const Memberships = lazy(() => import('../pages/Memberships'));
 const FeesPage = lazy(() => import('../pages/fees/FeesPage'));
 const ReceiptPage = lazy(() => import('../pages/fees/ReceiptPage'));
@@ -47,6 +48,7 @@ export default function AppRoutes() {
             <Route path="/trainees/:id" element={<TraineeProfile />} />
             <Route path="/trainees/:id/edit" element={<TraineeFormPage />} />
             <Route path="/trainees/:id/:kind/:assignmentId" element={<AssignmentEditor />} />
+            <Route path="/attendance" element={<Attendance />} />
             <Route path="/memberships" element={<Memberships />} />
             <Route path="/fees" element={<FeesPage />} />
             <Route path="/workouts" element={<WorkoutList />} />

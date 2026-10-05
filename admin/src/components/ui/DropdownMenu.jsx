@@ -2,6 +2,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router';
 import { EllipsisVertical } from 'lucide-react';
+import { pushBackHandler } from '../../native/backStack';
 
 /**
  * Row action menu. Rendered in a portal with fixed positioning so it never
@@ -22,8 +23,10 @@ export default function DropdownMenu({ items, label = 'More actions', trigger, a
   useLayoutEffect(() => {
     if (!open || !btnRef.current) return;
     const r = btnRef.current.getBoundingClientRect();
-    const menuH = menuRef.current?.offsetHeight || visible.length * 40 + 12;
-    const up = r.bottom + menuH + 8 > window.innerHeight && r.top > menuH;
+    const menuH = menuRef.current?.offsetHeight || visible.length * 46 + 12;
+    // Keep clear of the mobile tab bar.
+    const bottomLimit = window.innerHeight - (window.innerWidth < 1024 ? 88 : 0);
+    const up = r.bottom + menuH + 8 > bottomLimit && r.top > menuH;
     setPos({
       top: up ? r.top - menuH - 6 : r.bottom + 6,
       left: align === 'right' ? Math.max(8, r.right - 208) : Math.min(r.left, window.innerWidth - 216),
@@ -54,7 +57,9 @@ export default function DropdownMenu({ items, label = 'More actions', trigger, a
     window.addEventListener('scroll', close, true);
     window.addEventListener('resize', close);
     const t = setTimeout(() => menuRef.current?.querySelector('[role="menuitem"]')?.focus(), 10);
+    const popBack = pushBackHandler(close);
     return () => {
+      popBack();
       clearTimeout(t);
       document.removeEventListener('mousedown', onDoc);
       document.removeEventListener('touchstart', onDoc);
@@ -84,7 +89,7 @@ export default function DropdownMenu({ items, label = 'More actions', trigger, a
           e.stopPropagation();
           setOpen((o) => !o);
         }}
-        className={trigger ? '' : 'flex size-9 items-center justify-center rounded-lg text-zinc-500 transition hover:bg-zinc-100 hover:text-zinc-900'}
+        className={trigger ? '' : 'flex size-10 items-center justify-center rounded-lg text-zinc-500 transition hover:bg-zinc-100 hover:text-zinc-900'}
       >
         {trigger || <EllipsisVertical className="size-4.5" />}
       </button>
@@ -105,7 +110,7 @@ export default function DropdownMenu({ items, label = 'More actions', trigger, a
                   type="button"
                   role="menuitem"
                   onClick={run(item)}
-                  className={`flex w-full items-center gap-2.5 px-3.5 py-2.5 text-left text-sm outline-none transition focus:bg-zinc-100 ${
+                  className={`flex w-full items-center gap-2.5 px-3.5 py-2.5 text-left text-sm outline-none max-lg:py-3 transition focus:bg-zinc-100 ${
                     item.tone === 'danger' ? 'text-red-600 hover:bg-red-50 focus:bg-red-50' : 'text-zinc-700 hover:bg-zinc-50'
                   }`}
                 >

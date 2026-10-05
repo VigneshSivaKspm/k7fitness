@@ -6,6 +6,10 @@ import Logo from '../components/layout/Logo';
 import { useAuth } from '../context/AuthContext';
 import { friendlyError } from '../utils/errors';
 import { useDocumentTitle } from '../hooks/useAsync';
+import { isDemo } from '../firebase/config';
+
+// Offline demo build: one built-in account (see src/demo/auth.js).
+const DEMO_LOGIN = isDemo ? { email: 'demo@k7fitness.app', password: 'demo1234' } : null;
 
 function BrandPanel() {
   return (
@@ -43,8 +47,8 @@ export default function Login() {
   const { status, login, resetPassword, error: authError, clearError, devBypass } = useAuth();
   const location = useLocation();
   const [mode, setMode] = useState('login');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState(DEMO_LOGIN?.email || '');
+  const [password, setPassword] = useState(DEMO_LOGIN?.password || '');
   const [showPassword, setShowPassword] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
@@ -105,7 +109,7 @@ export default function Login() {
       <BrandPanel />
 
       <div className="flex flex-col">
-        <div className="flex items-center justify-center bg-ink px-6 py-6 lg:hidden">
+        <div className="flex items-center justify-center bg-ink px-6 pt-[calc(1.5rem+var(--sa-top))] pb-6 lg:hidden">
           <Logo subtitle="Admin Management System" />
         </div>
         <div className="flex flex-1 items-center justify-center px-5 py-10 sm:px-10">
@@ -120,6 +124,15 @@ export default function Login() {
                   <p className="mt-6 flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700" role="alert">
                     <TriangleAlert className="mt-0.5 size-4 shrink-0" /> {shownError}
                   </p>
+                )}
+
+                {DEMO_LOGIN && (
+                  <div className="mt-6 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+                    <p className="font-semibold">Demo mode: sample data, stored only on this device</p>
+                    <p className="mt-1 text-amber-800">
+                      Email <strong>{DEMO_LOGIN.email}</strong> · Password <strong>{DEMO_LOGIN.password}</strong>
+                    </p>
+                  </div>
                 )}
 
                 <div className="mt-6 space-y-4">

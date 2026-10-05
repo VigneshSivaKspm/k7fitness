@@ -18,9 +18,18 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
-const useEmulators = import.meta.env.DEV && import.meta.env.VITE_USE_EMULATORS === 'true';
+/**
+ * Demo build (`vite build --mode demo`): firebase/* is aliased to the on-device
+ * stand-ins in src/demo, so no Firebase project or credentials are needed.
+ */
+export const isDemo = import.meta.env.MODE === 'demo';
 
-export const isFirebaseConfigured = Boolean(firebaseConfig.apiKey && firebaseConfig.projectId);
+// Emulators: always allowed in `vite dev`; the `apk` build mode may also use them so a
+// demo APK can talk to emulators running on a laptop over Wi-Fi (VITE_EMULATOR_HOST).
+const useEmulators = !isDemo && (import.meta.env.DEV || import.meta.env.MODE === 'apk') && import.meta.env.VITE_USE_EMULATORS === 'true';
+const emulatorHost = import.meta.env.VITE_EMULATOR_HOST || '127.0.0.1';
+
+export const isFirebaseConfigured = isDemo || Boolean(firebaseConfig.apiKey && firebaseConfig.projectId);
 
 const app = isFirebaseConfigured ? initializeApp(firebaseConfig) : null;
 
@@ -37,9 +46,9 @@ export const db = app
 export const storage = app ? getStorage(app) : null;
 
 if (app && useEmulators) {
-  connectAuthEmulator(auth, 'http://127.0.0.1:9099', { disableWarnings: true });
-  connectFirestoreEmulator(db, '127.0.0.1', 8080);
-  connectStorageEmulator(storage, '127.0.0.1', 9199);
+  connectAuthEmulator(auth, `http://${emulatorHost}:9099`, { disableWarnings: true });
+  connectFirestoreEmulator(db, emulatorHost, 8080);
+  connectStorageEmulator(storage, emulatorHost, 9199);
 }
 
 if (auth) setPersistence(auth, browserLocalPersistence).catch(() => {});

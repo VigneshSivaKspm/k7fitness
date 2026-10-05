@@ -29,6 +29,7 @@ import MembershipTab from '../../components/trainees/profile/MembershipTab';
 import FeesTab from '../../components/trainees/profile/FeesTab';
 import PlanTab from '../../components/trainees/profile/PlanTab';
 import HistoryTab from '../../components/trainees/profile/HistoryTab';
+import AttendanceTab from '../../components/trainees/profile/AttendanceTab';
 import { deleteTrainee, getTrainee, setTraineeStatus } from '../../services/traineeService';
 import { useAsync, useDocumentTitle } from '../../hooks/useAsync';
 import { useReminders } from '../../hooks/useReminders';
@@ -39,6 +40,7 @@ import { formatPhone, telLink } from '../../utils/format';
 
 const TABS = [
   { value: 'overview', label: 'Overview' },
+  { value: 'attendance', label: 'Attendance' },
   { value: 'membership', label: 'Membership' },
   { value: 'fees', label: 'Fees' },
   { value: 'workout', label: 'Workout' },
@@ -133,7 +135,7 @@ export default function TraineeProfile() {
 
   return (
     <>
-      <Link to="/trainees" className="mb-3 inline-flex items-center gap-1.5 text-sm font-medium text-zinc-500 transition hover:text-zinc-900">
+      <Link to="/trainees" className="mb-3 hidden items-center lg:inline-flex gap-1.5 text-sm font-medium text-zinc-500 transition hover:text-zinc-900">
         <ArrowLeft className="size-4" /> Trainees
       </Link>
 
@@ -222,6 +224,7 @@ export default function TraineeProfile() {
       <Tabs tabs={TABS} value={tab} onChange={setTab} className="mt-5 mb-5" />
 
       {tab === 'overview' && <OverviewTab trainee={t} onTab={setTab} />}
+      {tab === 'attendance' && <AttendanceTab trainee={t} onChanged={refresh} />}
       {tab === 'membership' && <MembershipTab trainee={t} onRenew={() => setDialog('renew')} onPayment={() => setDialog('payment')} onChanged={refresh} />}
       {tab === 'fees' && <FeesTab trainee={t} onPayment={() => setDialog('payment')} onChanged={refresh} />}
       {tab === 'workout' && <PlanTab kind="workout" trainee={t} onAssign={() => setDialog('workout')} onChanged={refresh} />}

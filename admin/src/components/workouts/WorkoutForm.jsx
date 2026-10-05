@@ -52,32 +52,47 @@ export function cleanWorkout(w) {
   };
 }
 
+/** Small labelled input: placeholders alone are lost once a value is typed. */
+function Mini({ label, className = '', ...props }) {
+  return (
+    <label className={`block min-w-0 ${className}`}>
+      <span className="mb-1 block text-[0.7rem] font-semibold tracking-wide text-zinc-500 uppercase">{label}</span>
+      <input className="input !px-2.5 !py-2 text-sm" {...props} />
+    </label>
+  );
+}
+
 function ExerciseRow({ ex, index, count, error, onChange, onMove, onRemove }) {
   const set = (k) => (e) => onChange({ ...ex, [k]: e.target.value });
-  const small = 'input !px-2.5 !py-2 text-sm';
   return (
     <div className="rounded-xl border border-zinc-200 bg-white p-3">
-      <div className="flex items-start gap-2">
-        <span className="mt-2 flex size-6 shrink-0 items-center justify-center rounded-md bg-zinc-100 text-xs font-bold text-zinc-500">{index + 1}</span>
-        <div className="min-w-0 flex-1 space-y-2">
-          <input className={small} name={`ex-${ex.id}`} placeholder="Exercise name (e.g. Bench press)" value={ex.name} onChange={set('name')} aria-label="Exercise name" aria-invalid={Boolean(error)} />
-          <div className="grid grid-cols-3 gap-2 sm:grid-cols-5">
-            <input className={small} placeholder="Sets" inputMode="numeric" value={ex.sets} onChange={set('sets')} aria-label="Sets" />
-            <input className={small} placeholder="Reps" value={ex.reps} onChange={set('reps')} aria-label="Reps" />
-            <input className={small} placeholder="Weight" value={ex.weight} onChange={set('weight')} aria-label="Weight (optional)" />
-            <input className={small} placeholder="Duration" value={ex.duration} onChange={set('duration')} aria-label="Duration (optional)" />
-            <input className={small} placeholder="Rest" value={ex.rest} onChange={set('rest')} aria-label="Rest time (optional)" />
-          </div>
-          <input className={small} placeholder="Instructions (optional)" value={ex.instructions} onChange={set('instructions')} aria-label="Instructions (optional)" />
-          {error && <p className="text-xs font-medium text-red-600">{error}</p>}
-        </div>
-        <div className="flex flex-col items-center">
+      <div className="flex items-center gap-2">
+        <span className="flex size-7 shrink-0 items-center justify-center rounded-md bg-zinc-100 text-xs font-bold text-zinc-500">{index + 1}</span>
+        <input
+          className="input min-w-0 flex-1 !px-2.5 !py-2 text-sm font-medium"
+          name={`ex-${ex.id}`}
+          placeholder="Exercise name (e.g. Bench press)"
+          value={ex.name}
+          onChange={set('name')}
+          aria-label="Exercise name"
+          aria-invalid={Boolean(error)}
+        />
+        <div className="flex shrink-0 items-center">
           <ReorderButtons index={index} count={count} onMove={onMove} label="exercise" />
-          <button type="button" onClick={onRemove} className="rounded-md p-1.5 text-zinc-400 hover:bg-red-50 hover:text-red-600" aria-label="Remove exercise">
+          <button type="button" onClick={onRemove} className="rounded-md p-2 text-zinc-400 hover:bg-red-50 hover:text-red-600" aria-label="Remove exercise">
             <X className="size-4" />
           </button>
         </div>
       </div>
+      {error && <p className="mt-1.5 text-xs font-medium text-red-600">{error}</p>}
+      <div className="mt-2.5 grid grid-cols-3 gap-2 sm:grid-cols-5">
+        <Mini label="Sets" inputMode="numeric" placeholder="3" value={ex.sets} onChange={set('sets')} />
+        <Mini label="Reps" placeholder="12" value={ex.reps} onChange={set('reps')} />
+        <Mini label="Rest" placeholder="60 sec" value={ex.rest} onChange={set('rest')} />
+        <Mini label="Weight" placeholder="Optional" value={ex.weight} onChange={set('weight')} />
+        <Mini label="Duration" placeholder="Optional" value={ex.duration} onChange={set('duration')} />
+      </div>
+      <Mini label="Instructions" placeholder="Optional, e.g. slow negatives" value={ex.instructions} onChange={set('instructions')} className="mt-2" />
     </div>
   );
 }
