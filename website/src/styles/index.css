@@ -1,0 +1,101 @@
+@import "tailwindcss";
+
+/* ── K7 brand design tokens ──────────────────────────────────────────────
+   Change the palette here; every component reads from these tokens. */
+@theme {
+  --color-ink: #050505;
+  --color-ink-soft: #0d0d0f;
+  --color-ink-card: #111113;
+  --color-surface: #151518;
+  --color-line: rgb(255 255 255 / 0.08);
+
+  --color-brand: #a10825;
+  --color-brand-dark: #790f1f;
+  --color-brand-bright: #d20a35;
+
+  --color-snow: #ffffff;
+  --color-off-white: #f5f5f5;
+  --color-silver: #d5d5d5;
+  --color-steel: #5a5150;
+  --color-muted: #8b8b8b;
+
+  --font-display: "Bebas Neue", "Oswald", "Arial Narrow", sans-serif;
+  --font-sans: "Manrope", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --animate-fade-up: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-ink text-silver font-sans antialiased;
+    overflow-x: hidden;
+  }
+  h1, h2, h3, h4 {
+    @apply text-snow;
+  }
+  ::selection {
+    background: var(--color-brand);
+    color: #fff;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-brand-bright);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  .container-k7 {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+  .eyebrow {
+    @apply inline-flex items-center gap-3 text-xs font-bold uppercase tracking-[0.25em] text-brand-bright;
+  }
+  .eyebrow::before {
+    content: "";
+    @apply block h-[2px] w-8 bg-brand;
+  }
+  .display-title {
+    @apply font-display uppercase leading-[0.92] tracking-wide text-snow;
+  }
+  .card-k7 {
+    @apply rounded-2xl border border-line bg-ink-card transition duration-300;
+  }
+  .card-k7-hover {
+    @apply hover:-translate-y-1 hover:border-brand/40 hover:shadow-[0_18px_40px_-20px_rgb(161_8_37/0.45)];
+  }
+  .field-k7 {
+    @apply w-full rounded-xl border border-white/10 bg-ink-soft px-4 py-3 text-snow placeholder:text-muted/80
+      transition outline-none focus:border-brand focus:ring-4 focus:ring-brand/15;
+  }
+  /* Angular K7 cut used on section edges and image frames */
+  .clip-angle {
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 28px), calc(100% - 28px) 100%, 0 100%);
+  }
+  .clip-angle-sm {
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%);
+  }
+  .grain {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+  }
+}
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }

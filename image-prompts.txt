@@ -1,0 +1,365 @@
+K7 FITNESS STUDIO & GYM: WEBSITE IMAGE PROMPTS (MANDATORY IMAGES ONLY)
+=====================================================================
+
+HOW TO USE (read once)
+----------------------
+1. Start a NEW ChatGPT chat. Paste the "MASTER STYLE GUIDE" block first and wait for "ready".
+2. Then paste ONE image prompt at a time (1, 2, 3, 4a…). Each prompt is fully self-contained and
+   repeats the colour theme, so results stay consistent even in a long chat.
+3. If a result is close but not right, use the "FIX-IT PHRASES" at the bottom instead of starting over.
+4. Download each image as PNG/JPG and upload it in the Admin panel where it says "Upload to".
+   The admin automatically compresses and resizes images, so no editing is needed.
+5. Generate 2–3 versions of the HERO image and pick the strongest. It's the most important image.
+
+Deliberately NOT included: Trainer, Gallery and Testimonial photos must be REAL photos of your
+coaches, members and gym. AI-generated people there would mislead visitors.
+
+
+=====================================================================
+K7 COLOUR THEME (reference: matches the website and the K7 logo)
+=====================================================================
+  Deep black      #050505   main background, shadows               ~60–70% of every image
+  Charcoal        #0D0D0F / #151518   equipment, walls, floors
+  Crimson red     #A10825   THE ONLY accent colour: rim light, glow ~10–15% of every image
+  Dark crimson    #790F1F   red shadows, haze, gradients
+  Bright crimson  #D20A35   brightest highlights on edges only (small amounts)
+  Silver / grey   #D5D5D5 / #5A5150   metal (barbells, plates), subtle reflections
+  White           #FFFFFF   only for small specular highlights (sweat, chrome)
+
+  Rule: black + charcoal dominate, crimson is the accent, nothing else.
+  Never: blue, cyan, purple, teal, green, orange, yellow or rainbow/neon lighting.
+
+
+=====================================================================
+MASTER STYLE GUIDE  (paste this first, once per chat)
+=====================================================================
+You are my professional fitness photographer and art director. I'm creating the images for the
+website of "K7 FITNESS STUDIO & GYM", a premium, modern gym in Tamil Nadu, India. Its brand identity
+is POWERFUL, PREMIUM, DARK, ATHLETIC, MODERN: aggressive but clean.
+
+Apply ALL of these rules to EVERY image I request in this chat:
+
+PHOTOGRAPHIC STYLE
+- Ultra-photorealistic, editorial campaign quality (the look of a Nike Training or Gymshark
+  campaign shot on a full-frame camera such as a Sony A7R V / Canon R5).
+- Cinematic, low-key lighting: mostly deep shadow with controlled, sculpted highlights.
+- Sharp focus on the subject, natural shallow depth of field, very subtle film grain.
+- Realistic skin texture, real sweat, real chalk; no plastic, airbrushed or CGI look.
+
+COLOUR THEME (strict)
+- Dominant: deep black #050505 and charcoal #0D0D0F–#151518 (about 60–70% of the frame).
+- Single accent colour: crimson red #A10825 (dark crimson #790F1F in haze/shadows, bright crimson
+  #D20A35 only on the brightest rim highlights), about 10–15% of the frame.
+- Metal and highlights in neutral silver/grey and white.
+- NO blue, cyan, purple, teal, green, orange or yellow light anywhere. No rainbow, no neon signs.
+- Colour grade: cool-neutral blacks, rich crimson, natural warm skin tones.
+
+LOCATION
+- The same premium gym every time: black squat racks and benches, black rubber-hex dumbbells,
+  dark grey rubber flooring, concrete or matte black walls, thin crimson LED accent strips along
+  walls/ceiling edges, moody overhead spotlights. Clean, uncluttered, expensive-looking.
+
+PEOPLE
+- Indian / South Indian adults aged roughly 22–40, athletic and realistic (lean and strong,
+  NOT extreme bodybuilders), focused and confident, correct exercise form.
+- Clothing: plain black or charcoal athletic wear. No visible brands, logos or slogans.
+- Anatomically correct: natural hands with five fingers, realistic faces, correct grip on equipment.
+
+ABSOLUTELY FORBIDDEN IN EVERY IMAGE
+- Any text, letters, numbers, words, logos, brand marks, watermarks, signage, posters or screens
+  with writing. Weight plates must be blank (no numbers).
+- Mirror reflections showing extra people, distorted equipment, bent barbells, floating objects,
+  extra limbs or fingers, duplicated people, cartoon/illustration style, over-saturated colours.
+
+When you understand, reply only "ready" and wait for my first image request.
+
+
+=====================================================================
+1) HERO BACKGROUND  ★ MOST IMPORTANT
+=====================================================================
+Upload to : Admin → Website → Hero → Background image
+Format    : WIDE LANDSCAPE (16:9 or wider). Ask for the widest landscape size available.
+Purpose   : Full-screen background behind the headline "TRAIN HARD. LIVE STRONG."
+            The website darkens the LEFT side automatically and places white text there.
+
+Prompt:
+Create a wide, cinematic, ultra-photorealistic hero photograph for the K7 Fitness website.
+
+SUBJECT: A determined Indian man in his late 20s with a lean, powerful, realistic athletic build,
+short black hair and a trimmed beard, wearing a plain black sleeveless training top and black
+shorts. He is at the top of a heavy conventional barbell deadlift (standing tall, bar at his thighs),
+jaw set, eyes focused forward. Fine chalk dust floats in the air around his hands and the bar.
+
+COMPOSITION: He stands in the RIGHT THIRD of the frame, seen from a low three-quarter front angle
+(camera at knee height) so he looks powerful. The LEFT HALF of the image must be almost empty: a
+smooth falloff into deep black with only a softly blurred gym background, because a large white
+headline will sit there. Leave comfortable space above his head. Horizon level, nothing cut awkwardly.
+
+LIGHTING: Low-key studio-style lighting. A strong crimson red (#A10825 to #D20A35) rim light from
+behind-right outlines his shoulders, arms, back and the barbell plates with a glowing red edge.
+A soft, dim neutral key light from the front-left reveals his face and muscles. A faint dark-crimson
+(#790F1F) haze glows in the far background between the racks. Everything else falls to black #050505.
+
+BACKGROUND: Out-of-focus premium gym: black squat racks, dumbbell rack silhouettes, thin crimson
+LED strip along the back wall, dark rubber floor with a subtle reflection of the red light.
+
+CAMERA: Full-frame camera, 35mm lens, f/2.0, shallow depth of field, crisp focus on the athlete,
+gentle film grain.
+
+COLOUR: About 70% deep black and charcoal, about 15% crimson red light, the rest natural skin and
+silver metal. Absolutely no blue, purple, teal, green or orange light.
+
+MOOD: Power, discipline, intensity, premium. Like the opening frame of a sports brand campaign.
+
+AVOID: any text, logos, numbers on plates, signage, mirrors with reflections, extra people in focus,
+distorted hands or barbell, over-saturation, cartoon look.
+
+
+=====================================================================
+2) ABOUT SECTION: MAIN IMAGE
+=====================================================================
+Upload to : Admin → Website → About → Main image
+Format    : LANDSCAPE 4:3
+Purpose   : Shows the gym's space and coaching culture next to the "About K7" text.
+            Displayed with an angled corner cut, so keep important details away from the bottom-right.
+
+Prompt:
+Create an ultra-photorealistic, wide interior photograph of the K7 Fitness premium gym floor in the
+evening, showing a real coaching moment.
+
+SUBJECT: In the mid-ground, an Indian male coach in a plain black t-shirt is guiding an Indian woman
+member (late 20s, athletic, black training wear, hair tied back) through a single-arm dumbbell row
+on a black bench. He points to her back position; she is focused. Two other members train softly out
+of focus in the background (one on a cable machine, one with dumbbells).
+
+COMPOSITION: Eye-level, slightly wide view that shows the scale of the gym: rows of black squat
+racks, a full black dumbbell rack, benches and clean dark grey rubber flooring leading into the
+distance (strong depth). Main subjects slightly left of centre. Keep the bottom-right corner simple.
+
+LIGHTING: Moody but clearly visible (not too dark): soft overhead spotlights create pools of light
+on the floor; thin crimson red (#A10825) LED strips run along the walls and ceiling edges, casting a
+subtle red glow on the equipment and floor. Neutral, natural light on the people's faces and skin.
+
+CAMERA: Full-frame, 24–28mm lens, f/4, everything reasonably sharp with gentle background softness.
+
+COLOUR: Deep black and charcoal surfaces dominate; crimson red accent glow; silver metal highlights;
+natural skin tones. No blue, purple, green or orange lighting.
+
+MOOD: Professional, spacious, clean, welcoming, a place where serious training and real coaching
+happen.
+
+AVOID: text, logos, posters, signage, numbers on weights, mirrors with odd reflections, clutter,
+crowded floor, distorted faces or hands.
+
+
+=====================================================================
+3) ABOUT SECTION: SECONDARY IMAGE (small inset)
+=====================================================================
+Upload to : Admin → Website → About → Secondary image
+Format    : SQUARE 1:1
+Purpose   : Small square photo overlapping the main About image; a detail shot that adds texture.
+
+Prompt:
+Create an ultra-photorealistic, square macro-style close-up of an athlete's chalked hands gripping a
+black knurled Olympic barbell, just before a lift.
+
+COMPOSITION: Square frame, both hands centred and filling the middle of the frame, knuckles tense,
+forearm veins slightly visible, white chalk on the palms and fingers, chalk particles drifting in the
+air. Barbell runs horizontally across the frame. Natural five-finger hands with a correct overhand
+grip.
+
+LIGHTING: Dark background (#050505) with a soft crimson red (#A10825) glow behind the hands and a
+crisp neutral side light that reveals the knurling texture, chalk and skin detail.
+
+CAMERA: 85–100mm macro lens, f/2.8, very shallow depth of field, tack-sharp on the knuckles and bar.
+
+COLOUR: Black, charcoal, silver metal, white chalk and one crimson accent glow. Nothing else.
+
+MOOD: Grit, focus, the moment before effort.
+
+AVOID: text, logos, numbers, rings or jewellery, extra or missing fingers, gloves, blurry hands.
+
+
+=====================================================================
+4) PROGRAM CARD IMAGES  (one per program, all LANDSCAPE 4:3)
+=====================================================================
+Upload to : Admin → Website → Programs → (open the program) → Image
+Purpose   : Background of each program card. The website places the program NAME, a red line and
+            a short description over the BOTTOM THIRD with a dark gradient.
+
+IMPORTANT FOR ALL FOUR: keep the person and action in the TOP and MIDDLE of the frame. The bottom
+third should be darker, simpler floor area. Use the SAME gym and the SAME lighting style in all four
+so the cards look like one matching set.
+
+---------------------------------------------------------------------
+4a) STRENGTH TRAINING
+---------------------------------------------------------------------
+Prompt:
+Create an ultra-photorealistic 4:3 landscape photograph for the K7 Fitness "Strength Training"
+program card, matching the same premium dark gym and lighting as the previous images.
+
+SUBJECT: A strong Indian man (around 30, realistic powerful build, black t-shirt and shorts)
+performing a heavy barbell back squat inside a black squat rack, at the bottom of the squat with
+perfect form, intense focus, slight sweat.
+
+COMPOSITION: Side three-quarter view, athlete and bar in the upper two-thirds of the frame; the
+lower third is plain dark rubber floor fading to black. Barbell loaded with blank black plates.
+
+LIGHTING: Strong crimson red (#A10825) rim light from behind outlining his body and the plates;
+dim neutral key light on his face; background falls to deep black (#050505) with a faint crimson haze.
+
+CAMERA: 35mm lens, f/2.2, sharp on the athlete, soft background, subtle grain.
+
+COLOUR: Mostly black and charcoal, crimson accent light, silver metal. No other colours.
+
+MOOD: Raw strength, power, discipline.
+
+AVOID: text, logos, numbers on plates, distorted bar or hands, extra people in focus.
+
+---------------------------------------------------------------------
+4b) FAT LOSS / CARDIO CONDITIONING
+---------------------------------------------------------------------
+Prompt:
+Create an ultra-photorealistic 4:3 landscape photograph for the K7 Fitness "Fat Loss" program card,
+matching the same premium dark gym and lighting as the previous images.
+
+SUBJECT: A fit Indian woman (late 20s, athletic, black sports bra/top and black leggings, hair tied)
+doing high-intensity battle-rope waves, ropes in powerful motion with slight motion blur, droplets of
+sweat catching the light, determined expression.
+
+COMPOSITION: Front three-quarter view, woman and the arcs of the ropes in the upper two-thirds; the
+lower third is simple dark floor where the ropes fade into shadow.
+
+LIGHTING: Crimson red (#A10825) backlight and rim light making the moving ropes and her silhouette
+glow at the edges; soft neutral light on her face; deep black background with faint dark-crimson
+(#790F1F) haze.
+
+CAMERA: 50mm lens, f/2.0, fast shutter freezing the athlete while the rope ends blur slightly.
+
+COLOUR: Black, charcoal, crimson accent, natural skin tones. No other colours.
+
+MOOD: Energy, sweat, burn, high intensity.
+
+AVOID: text, logos, cartoonish motion trails, distorted hands or ropes, extra people.
+
+---------------------------------------------------------------------
+4c) PERSONAL TRAINING
+---------------------------------------------------------------------
+Prompt:
+Create an ultra-photorealistic 4:3 landscape photograph for the K7 Fitness "Personal Training"
+program card, matching the same premium dark gym and lighting as the previous images.
+
+SUBJECT: An experienced Indian male personal trainer (early 30s, fit, plain black t-shirt) standing
+behind a bench and carefully spotting an Indian male client doing a dumbbell bench press. The trainer
+leans in, hands close to the client's wrists, giving focused instruction; the client pushes with
+effort. The scene clearly shows one-to-one coaching, trust and expertise.
+
+COMPOSITION: Slightly elevated three-quarter view so both faces are visible, both people in the upper
+two-thirds; the lower third is dark bench base and floor fading to black.
+
+LIGHTING: Warm-neutral key light on both faces; crimson red (#A10825) rim light from behind
+separating them from the dark background; subtle crimson glow on the dumbbells.
+
+CAMERA: 35mm lens, f/2.5, both people sharp, background softly blurred.
+
+COLOUR: Black and charcoal dominant, crimson accent, natural skin tones, silver dumbbell highlights.
+
+MOOD: Expert guidance, safety, personal attention, premium coaching.
+
+AVOID: text, logos, numbers on dumbbells, distorted hands or faces, awkward grips, extra people.
+
+---------------------------------------------------------------------
+4d) BODY TRANSFORMATION
+---------------------------------------------------------------------
+Prompt:
+Create an ultra-photorealistic 4:3 landscape photograph for the K7 Fitness "Transformation" program
+card, matching the same premium dark gym and lighting as the previous images.
+
+SUBJECT: A fit, confident Indian man (around 30) standing tall in the gym after a hard session,
+side-profile, wearing a black fitted t-shirt with a black towel over one shoulder, breathing calmly,
+looking slightly upward with a quiet, proud expression. Lean, defined, realistic physique (achievable,
+not extreme).
+
+COMPOSITION: Waist-up to mid-thigh framing, the man in the upper two-thirds, slightly right of centre;
+the lower third darkens to black. Plenty of dark negative space around him.
+
+LIGHTING: Dramatic crimson red (#A10825) side light sculpting one side of his face and body; the
+other side falls into deep shadow; faint dark-crimson haze in the background.
+
+CAMERA: 85mm portrait lens, f/1.8, creamy background blur, sharp eyes.
+
+COLOUR: Deep black, charcoal, crimson light, natural skin. Nothing else.
+
+MOOD: Achievement, discipline, "before you know it, you've changed", inspiring and premium.
+
+AVOID: text, logos, shirtless bodybuilder clichés, oiled skin, distorted anatomy, extra people.
+
+
+=====================================================================
+5) SOCIAL SHARE IMAGE (link preview on WhatsApp / Facebook / Instagram)
+=====================================================================
+Save as   : website/public/og-image.jpg (give this file to the developer to connect)
+Format    : WIDE LANDSCAPE; final size exactly 1200 × 630 px (crop to 1.91 : 1 if needed)
+Purpose   : The preview picture shown when someone shares the website link. The K7 logo and gym
+            name will be placed on the dark left side afterwards.
+
+Prompt:
+Create an ultra-photorealistic, wide cinematic banner photograph for K7 Fitness, intended to be
+cropped to 1200 × 630 pixels.
+
+SUBJECT: In the right half, a neat row of black hexagonal dumbbells on a black rack in the sharp
+foreground, with a softly blurred Indian athlete training with a barbell further back.
+
+COMPOSITION: The LEFT 45% of the frame must be smooth, empty, deep black (#050505) with only a
+faint charcoal gradient, completely free of objects, because a logo and name will be placed there.
+Keep important details away from all four edges (safe margin) since platforms crop slightly.
+
+LIGHTING: Strong crimson red (#A10825 → #D20A35) glow coming from the right side, catching the
+edges of the dumbbells; faint dark-crimson haze in the background; everything else black.
+
+CAMERA: 50mm lens, f/2.0, sharp dumbbells, blurred athlete.
+
+COLOUR: About 70% black and charcoal, 15–20% crimson glow, silver metal highlights. No other colours.
+
+MOOD: Premium, powerful, instantly recognisable as a serious gym.
+
+AVOID: any text or logo (we will add our own), numbers on dumbbells, clutter on the left side.
+
+
+=====================================================================
+FIX-IT PHRASES  (reply with these when a result needs adjusting)
+=====================================================================
+- Text or logos appeared:
+  "Regenerate exactly the same scene but with absolutely no text, letters, numbers or logos anywhere,
+  including on weight plates and walls."
+- Wrong colours:
+  "Regenerate with ONLY deep black, charcoal and crimson red #A10825 lighting. Remove all blue,
+  purple, green and orange light."
+- Too dark:
+  "Keep the same moody style, but lift the shadows slightly so the people and equipment are clearly
+  visible."
+- Too bright / not premium:
+  "Make it darker and more cinematic: low-key lighting, deeper blacks, stronger crimson rim light."
+- Subject in the wrong place (hero / share image):
+  "Move the athlete to the right third and keep the left half empty and dark for text."
+- Hands, face or equipment look wrong:
+  "Regenerate with anatomically correct hands (five fingers, natural grip) and a straight, realistic
+  barbell."
+- Looks fake / CGI:
+  "Make it more photorealistic: natural skin texture, real sweat, subtle film grain, like a real
+  camera photo, not a 3D render."
+- Inconsistent set:
+  "Match the gym, lighting and colour grade of the previous image exactly."
+
+
+=====================================================================
+CHECKLIST
+=====================================================================
+[ ] 1   Hero background (wide)           → Admin → Website → Hero
+[ ] 2   About main image (4:3)           → Admin → Website → About
+[ ] 3   About secondary image (1:1)      → Admin → Website → About
+[ ] 4a  Strength Training (4:3)          → Admin → Website → Programs
+[ ] 4b  Fat Loss / Cardio (4:3)          → Admin → Website → Programs
+[ ] 4c  Personal Training (4:3)          → Admin → Website → Programs
+[ ] 4d  Body Transformation (4:3)        → Admin → Website → Programs
+[ ] 5   Social share image (1200 × 630)  → website/public/og-image.jpg (developer connects it)

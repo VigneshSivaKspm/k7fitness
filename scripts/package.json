@@ -1,0 +1,17 @@
+{
+  "name": "k7-scripts",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Owner-run setup scripts (create admins, optional starter content). Never deployed.",
+  "scripts": {
+    "create-admin": "node create-admin.mjs",
+    "seed": "node seed-starter-content.mjs"
+  },
+  "dependencies": {
+    "firebase-admin": "^14.5.0"
+  },
+  "engines": {
+    "node": ">=20.19"
+  }
+}

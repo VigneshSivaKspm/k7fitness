@@ -1,0 +1,209 @@
+rules_version = '2';
+
+// ──────────────────────────────────────────────────────────────────────────
+//  K7 Fitness Studio & Gym — Cloud Firestore Security Rules
+//
+//  Access model
+//  • Public visitors   → read intentionally-public website content only,
+//                        create enquiries (validated, create-only).
+//  • Staff (admins)    → a signed-in user with an `admins/{uid}` document
+//                        whose `active == true`. Full CRM access.
+//  • Owner             → staff with role "owner". Can manage other admins.
+//
+//  Future RBAC: `hasRole([...])` is available for narrowing access per role
+//  (manager, trainer, receptionist) without restructuring data.
+// ──────────────────────────────────────────────────────────────────────────
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Helpers ────────────────────────────────────────────────────────────
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function adminPath() {
+      return /databases/$(database)/documents/admins/$(request.auth.uid);
+    }
+
+    function isStaff() {
+      return isSignedIn()
+        && exists(adminPath())
+        && get(adminPath()).data.active == true;
+    }
+
+    function hasRole(roles) {
+      return isStaff() && get(adminPath()).data.role in roles;
+    }
+
+    function isNonNegativeNumber(v) {
+      return (v is int || v is float) && v >= 0;
+    }
+
+    function isPositiveNumber(v) {
+      return (v is int || v is float) && v > 0;
+    }
+
+    function isShortString(v, min, max) {
+      return v is string && v.size() >= min && v.size() <= max;
+    }
+
+    // ── Admin accounts ─────────────────────────────────────────────────────
+    // Created by the owner (or via the documented setup script). There is no
+    // public sign-up path: a Firebase Auth account alone grants nothing.
+    match /admins/{uid} {
+      allow read: if (isSignedIn() && request.auth.uid == uid) || isStaff();
+      allow create, delete: if hasRole(['owner']);
+      // Owners manage everyone; staff may only change their own display name.
+      allow update: if hasRole(['owner'])
+        || (isStaff() && request.auth.uid == uid
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name', 'updatedAt']));
+    }
+
+    // ── Private CRM data ───────────────────────────────────────────────────
+    match /settings/{docId} {
+      allow read: if isStaff();
+      allow write: if hasRole(['owner', 'admin', 'manager']);
+    }
+
+    match /counters/{docId} {
+      allow read: if isStaff();
+      allow create, update: if isStaff()
+        && request.resource.data.value is int
+        && request.resource.data.value >= (resource == null ? 0 : resource.data.value);
+      allow delete: if false;
+    }
+
+    match /trainees/{id} {
+      allow read: if isStaff();
+      allow create, update: if isStaff()
+        && isShortString(request.resource.data.fullName, 2, 120)
+        && request.resource.data.phone is string
+        && request.resource.data.status in ['active', 'inactive']
+        && isNonNegativeNumber(request.resource.data.totalFee)
+        && isNonNegativeNumber(request.resource.data.totalPaid)
+        && isNonNegativeNumber(request.resource.data.pendingAmount);
+      allow delete: if isStaff();
+    }
+
+    match /memberships/{id} {
+      allow read: if isStaff();
+      allow create, update: if isStaff()
+        && request.resource.data.traineeId is string
+        && isNonNegativeNumber(request.resource.data.fee)
+        && isNonNegativeNumber(request.resource.data.paidAmount)
+        && request.resource.data.paidAmount <= request.resource.data.fee
+        && request.resource.data.expiryDate >= request.resource.data.startDate;
+      allow delete: if isStaff();
+    }
+
+    // Payments are financial records: never deleted, never re-priced.
+    // Mistakes are corrected by voiding (status → "void").
+    match /payments/{id} {
+      allow read: if isStaff();
+      allow create: if isStaff()
+        && request.resource.data.traineeId is string
+        && request.resource.data.membershipId is string
+        && isPositiveNumber(request.resource.data.amount)
+        && request.resource.data.method in ['cash', 'upi', 'card', 'bank', 'other']
+        && request.resource.data.status == 'valid';
+      allow update: if isStaff()
+        && request.resource.data.amount == resource.data.amount
+        && request.resource.data.traineeId == resource.data.traineeId
+        && request.resource.data.membershipId == resource.data.membershipId;
+      allow delete: if false;
+    }
+
+    match /workoutTemplates/{id} {
+      allow read, write: if isStaff();
+    }
+
+    match /workoutAssignments/{id} {
+      allow read, write: if isStaff();
+    }
+
+    match /dietTemplates/{id} {
+      allow read, write: if isStaff();
+    }
+
+    match /dietAssignments/{id} {
+      allow read, write: if isStaff();
+    }
+
+    // Append-only audit trail.
+    match /activityLogs/{id} {
+      allow read: if isStaff();
+      allow create: if isStaff() && request.resource.data.adminUid == request.auth.uid;
+      allow update, delete: if false;
+    }
+
+    // ── Enquiries: public create-only ──────────────────────────────────────
+    // Document IDs are derived from phone + date by the website, so a repeat
+    // submission on the same day becomes an "update" and is rejected.
+    match /enquiries/{id} {
+      allow read, update, delete: if isStaff();
+      allow create: if
+        request.resource.data.keys().hasOnly(['name', 'phone', 'email', 'interest', 'message', 'status', 'source', 'createdAt'])
+        && request.resource.data.keys().hasAll(['name', 'phone', 'status', 'source', 'createdAt'])
+        && isShortString(request.resource.data.name, 2, 80)
+        && request.resource.data.phone is string
+        && request.resource.data.phone.matches('^\\+?[0-9]{10,13}$')
+        && (!('email' in request.resource.data) || isShortString(request.resource.data.email, 0, 120))
+        && (!('interest' in request.resource.data) || isShortString(request.resource.data.interest, 0, 100))
+        && (!('message' in request.resource.data) || isShortString(request.resource.data.message, 0, 1000))
+        && request.resource.data.status == 'new'
+        && request.resource.data.source == 'website'
+        && request.resource.data.createdAt == request.time;
+    }
+
+    // ── Public website content ─────────────────────────────────────────────
+    // Membership plans are shared by the CRM and the website. Visitors only
+    // see plans that are both active and flagged "show on website".
+    match /membershipPlans/{id} {
+      allow read: if isStaff()
+        || (resource.data.active == true && resource.data.showOnWebsite == true);
+      allow create, update: if isStaff()
+        && isShortString(request.resource.data.name, 2, 80)
+        && isPositiveNumber(request.resource.data.duration)
+        && request.resource.data.durationUnit in ['days', 'months', 'years']
+        && isNonNegativeNumber(request.resource.data.price);
+      allow delete: if isStaff();
+    }
+
+    match /programs/{id} {
+      allow read: if isStaff() || resource.data.active == true;
+      allow write: if isStaff();
+    }
+
+    match /trainers/{id} {
+      allow read: if isStaff() || resource.data.active == true;
+      allow write: if isStaff();
+    }
+
+    match /gallery/{id} {
+      allow read: if isStaff() || resource.data.active == true;
+      allow write: if isStaff();
+    }
+
+    match /testimonials/{id} {
+      allow read: if isStaff() || resource.data.active == true;
+      allow write: if isStaff();
+    }
+
+    match /offers/{id} {
+      allow read: if isStaff() || resource.data.active == true;
+      allow write: if isStaff();
+    }
+
+    // hero / about / contact singletons
+    match /websiteSettings/{docId} {
+      allow read: if true;
+      allow write: if isStaff();
+    }
+
+    // Everything else is closed by default.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

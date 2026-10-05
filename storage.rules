@@ -1,0 +1,43 @@
+rules_version = '2';
+
+// ──────────────────────────────────────────────────────────────────────────
+//  K7 Fitness Studio & Gym — Firebase Storage Security Rules
+//
+//  public/**   Website media (hero, gallery, trainers, programs, offers,
+//              testimonials, logo). Anyone can read; only staff can write.
+//  private/**  CRM media (trainee photos). Staff only.
+//
+//  Staff = signed-in user with an active `admins/{uid}` Firestore document.
+// ──────────────────────────────────────────────────────────────────────────
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function isStaff() {
+      return request.auth != null
+        && firestore.exists(/databases/(default)/documents/admins/$(request.auth.uid))
+        && firestore.get(/databases/(default)/documents/admins/$(request.auth.uid)).data.active == true;
+    }
+
+    // Raster images only (SVG is excluded because it can carry script).
+    function isValidImage() {
+      return request.resource.contentType.matches('image/(jpeg|png|webp)')
+        && request.resource.size < 5 * 1024 * 1024;
+    }
+
+    match /public/{allPaths=**} {
+      allow read: if true;
+      allow create, update: if isStaff() && isValidImage();
+      allow delete: if isStaff();
+    }
+
+    match /private/{allPaths=**} {
+      allow read, delete: if isStaff();
+      allow create, update: if isStaff() && isValidImage();
+    }
+
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

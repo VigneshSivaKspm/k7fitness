@@ -1,0 +1,51 @@
+# ── Dependencies ────────────────────────────────────────────────────────────
+node_modules/
+.pnpm-store/
+
+# ── Build output ────────────────────────────────────────────────────────────
+dist/
+dist-ssr/
+*.local
+
+# ── Environment & secrets (never commit) ────────────────────────────────────
+# Real values go in Vercel → Project → Settings → Environment Variables.
+.env
+.env.*
+!.env.example
+scripts/service-account*.json
+*-service-account*.json
+*.pem
+*.key
+
+# ── Deployment / tooling caches ─────────────────────────────────────────────
+.vercel/
+.firebase/
+.firebaserc
+!.firebaserc.example
+.vite/
+.cache/
+.eslintcache
+
+# ── Firebase emulator data & logs ───────────────────────────────────────────
+.emulator-data/
+*.log
+firebase-debug.*.log
+hs_err_pid*.log
+replay_pid*.log
+
+# ── Test artifacts ──────────────────────────────────────────────────────────
+tests/shots/
+tests/test-results/
+tests/playwright-report/
+tests/fail-*.png
+coverage/
+
+# ── Editors & OS ────────────────────────────────────────────────────────────
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+desktop.ini

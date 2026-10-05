@@ -1,0 +1,433 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "trainees",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "status",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "joiningDate",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "trainees",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "status",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "nameLower",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "trainees",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "status",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "membershipExpiry",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "trainees",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "currentPlanId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "joiningDate",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "trainees",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "currentPlanId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "nameLower",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "trainees",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "currentPlanId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "membershipExpiry",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "trainees",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "paymentStatus",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "joiningDate",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "trainees",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "paymentStatus",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "nameLower",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "trainees",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "paymentStatus",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "membershipExpiry",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "trainees",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "hasDues",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "feeDueDate",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "payments",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "status",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "paymentDate",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "payments",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "status",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "method",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "paymentDate",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "payments",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "traineeId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "paymentDate",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "payments",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "searchTokens",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "paymentDate",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "memberships",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "traineeId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "startDate",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "workoutAssignments",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "traineeId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "assignedAt",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "dietAssignments",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "traineeId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "assignedAt",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "enquiries",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "status",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "activityLogs",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "recordId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "createdAt",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "membershipPlans",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "active",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "showOnWebsite",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "displayOrder",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "programs",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "active",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "displayOrder",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "trainers",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "active",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "displayOrder",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "gallery",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "active",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "displayOrder",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "testimonials",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "active",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "displayOrder",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "offers",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "active",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "endDate",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "trainees",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "status",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "membershipExpiry",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "trainees",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "currentPlanId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "membershipExpiry",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "trainees",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "paymentStatus",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "membershipExpiry",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "trainees",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "status",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "feeDueDate",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "trainees",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "currentPlanId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "feeDueDate",
+          "order": "ASCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
