@@ -20,9 +20,13 @@ function demoMode() {
       outDir = config.build.outDir;
     },
     closeBundle() {
-      const target = fileURLToPath(new URL(`./${outDir}/images/`, import.meta.url));
-      mkdirSync(target, { recursive: true });
-      for (const f of readdirSync(imagesDir)) if (f.endsWith('.webp')) copyFileSync(imagesDir + f, target + f);
+      try {
+        const target = fileURLToPath(new URL(`./${outDir}/images/`, import.meta.url));
+        mkdirSync(target, { recursive: true });
+        for (const f of readdirSync(imagesDir)) if (f.endsWith('.webp')) copyFileSync(imagesDir + f, target + f);
+      } catch {
+        /* ignore if directory does not exist */
+      }
     },
   };
 }

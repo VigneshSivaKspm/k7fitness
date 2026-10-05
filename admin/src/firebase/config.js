@@ -18,15 +18,19 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
-/**
- * Demo build (`vite build --mode demo`): firebase/* is aliased to the on-device
- * stand-ins in src/demo, so no Firebase project or credentials are needed.
- */
-export const isDemo = import.meta.env.MODE === 'demo';
+export const isDemo =
+  import.meta.env.MODE === 'demo' ||
+  import.meta.env.VITE_IS_DEMO === 'true' ||
+  import.meta.env.VITE_DEMO_MODE === 'true' ||
+  !firebaseConfig.apiKey ||
+  firebaseConfig.apiKey === 'demo-api-key' ||
+  firebaseConfig.apiKey.startsWith('demo');
 
-// Emulators: always allowed in `vite dev`; the `apk` build mode may also use them so a
-// demo APK can talk to emulators running on a laptop over Wi-Fi (VITE_EMULATOR_HOST).
-const useEmulators = !isDemo && (import.meta.env.DEV || import.meta.env.MODE === 'apk') && import.meta.env.VITE_USE_EMULATORS === 'true';
+// Emulators: only when not in demo mode AND explicitly enabled in dev/apk
+const useEmulators =
+  !isDemo &&
+  (import.meta.env.DEV || import.meta.env.MODE === 'apk') &&
+  import.meta.env.VITE_USE_EMULATORS === 'true';
 const emulatorHost = import.meta.env.VITE_EMULATOR_HOST || '127.0.0.1';
 
 export const isFirebaseConfigured = isDemo || Boolean(firebaseConfig.apiKey && firebaseConfig.projectId);
