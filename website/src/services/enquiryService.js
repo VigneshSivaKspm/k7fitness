@@ -14,7 +14,11 @@ function dayKey(d = new Date()) {
  * rejected server-side: a simple, reliable duplicate/spam guard.
  */
 export async function submitEnquiry({ name, phone, email, interest, message }) {
-  if (!db) throw new EnquiryError('Online enquiries are temporarily unavailable. Please call or WhatsApp us.');
+  if (!db) {
+    // Demo mode: simulate delay and succeed for client demo showcase
+    await new Promise((resolve) => setTimeout(resolve, 700));
+    return;
+  }
   const digits = phoneDigits(phone);
   const payload = {
     name: name.trim(),
