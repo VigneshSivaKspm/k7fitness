@@ -4,7 +4,9 @@
  * never cached here (Firestore has its own offline cache).
  */
 const CACHE = 'k7-admin-shell-v1';
-const SHELL = ['/', '/favicon.svg', '/brand/k7-mark.svg', '/manifest.webmanifest'];
+// Paths are relative to the worker's scope so the admin can live at / or /admin/.
+const BASE = new URL(self.registration.scope).pathname;
+const SHELL = [BASE, `${BASE}favicon.svg`, `${BASE}brand/k7-mark.svg`, `${BASE}manifest.webmanifest`];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));
@@ -31,16 +33,16 @@ self.addEventListener('fetch', (event) => {
       fetch(request)
         .then((res) => {
           const copy = res.clone();
-          caches.open(CACHE).then((c) => c.put('/', copy));
+          caches.open(CACHE).then((c) => c.put(BASE, copy));
           return res;
         })
-        .catch(() => caches.match('/')),
+        .catch(() => caches.match(BASE)),
     );
     return;
   }
 
   // Hashed build assets are immutable: cache first.
-  if (url.pathname.startsWith('/assets/') || url.pathname.startsWith('/brand/')) {
+  if (url.pathname.startsWith(`${BASE}assets/`) || url.pathname.startsWith(`${BASE}brand/`)) {
     event.respondWith(
       caches.match(request).then(
         (hit) =>

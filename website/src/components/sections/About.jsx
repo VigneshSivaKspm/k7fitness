@@ -1,6 +1,7 @@
 import { Check, Eye, Target } from 'lucide-react';
 import SectionHeading from '../ui/SectionHeading';
 import Reveal from '../ui/Reveal';
+import MobileCarousel from '../ui/MobileCarousel';
 import { useContent } from '../../context/ContentContext';
 import { getFacilityIcon } from '../../constants/icons';
 
@@ -27,7 +28,7 @@ function Facilities({ facilities }) {
   return (
     <div className="mt-20">
       <SectionHeading eyebrow="Facilities" title="Everything you need to train" />
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <MobileCarousel label="Facilities" itemClass="w-[72%]" gridClass="sm:grid sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
         {items.map((f, i) => {
           const Icon = getFacilityIcon(f.icon);
           return (
@@ -40,7 +41,7 @@ function Facilities({ facilities }) {
             </Reveal>
           );
         })}
-      </div>
+      </MobileCarousel>
     </div>
   );
 }

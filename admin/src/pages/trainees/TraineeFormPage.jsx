@@ -196,7 +196,7 @@ export default function TraineeFormPage() {
                   <TriangleAlert className="mt-0.5 size-4 shrink-0" />
                   <span>
                     This number already belongs to{' '}
-                    <a href={`/trainees/${duplicate.id}`} target="_blank" rel="noreferrer" className="font-semibold underline">
+                    <a href={`${import.meta.env.BASE_URL}trainees/${duplicate.id}`} target="_blank" rel="noreferrer" className="font-semibold underline">
                       {duplicate.fullName} ({duplicate.memberId})
                     </a>
                     . You can still save if this is intentional.

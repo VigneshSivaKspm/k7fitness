@@ -1,3 +1,4 @@
+import { assetUrl } from '../utils/format';
 import { Navigate, Outlet, useLocation } from 'react-router';
 import { useAuth } from '../context/AuthContext';
 import { SettingsProvider } from '../context/SettingsContext';
@@ -12,7 +13,7 @@ export default function ProtectedRoute() {
     return (
       <div className="flex min-h-svh items-center justify-center bg-ink">
         <div className="flex flex-col items-center gap-5">
-          <img src="/brand/k7-mark.svg" alt="K7 Fitness" className="h-14 w-auto animate-pulse" />
+          <img src={assetUrl('brand/k7-mark.svg')} alt="K7 Fitness" className="h-14 w-auto animate-pulse" />
           <PageLoader label="" />
         </div>
       </div>

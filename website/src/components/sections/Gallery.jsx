@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import SectionHeading from '../ui/SectionHeading';
 import Reveal from '../ui/Reveal';
+import MobileCarousel from '../ui/MobileCarousel';
 import { useContent } from '../../context/ContentContext';
 
 function Lightbox({ items, index, onClose, onMove }) {
@@ -106,9 +107,9 @@ export default function Gallery() {
           )}
         </div>
 
-        <div className="columns-2 gap-3 sm:gap-4 lg:columns-3 xl:columns-4">
+        <MobileCarousel label="Gallery" itemClass="w-[72%] sm:mb-4 sm:break-inside-avoid" gridClass="sm:block sm:columns-2 sm:gap-4 lg:columns-3 xl:columns-4">
           {items.map((g, i) => (
-            <Reveal key={g.id} delay={(i % 4) * 60} className="mb-3 break-inside-avoid sm:mb-4">
+            <Reveal key={g.id} delay={(i % 4) * 60} className="break-inside-avoid">
               <button
                 type="button"
                 onClick={() => setOpenIndex(i)}
@@ -120,7 +121,7 @@ export default function Gallery() {
                   alt={g.title || g.caption || 'K7 gym photo'}
                   loading="lazy"
                   decoding="async"
-                  className="w-full object-cover transition duration-700 group-hover:scale-105"
+                  className="aspect-[4/5] w-full object-cover transition duration-700 group-hover:scale-105 sm:aspect-auto"
                 />
                 <span className="absolute inset-0 flex items-end bg-gradient-to-t from-black/80 via-transparent p-4 opacity-0 transition group-hover:opacity-100">
                   {g.title && <span className="font-display text-xl tracking-wide text-white">{g.title}</span>}
@@ -128,7 +129,7 @@ export default function Gallery() {
               </button>
             </Reveal>
           ))}
-        </div>
+        </MobileCarousel>
       </div>
       {openIndex !== null && <Lightbox items={items} index={openIndex} onClose={close} onMove={move} />}
     </section>

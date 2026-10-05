@@ -1,6 +1,7 @@
 import { Check } from 'lucide-react';
 import SectionHeading from '../ui/SectionHeading';
 import Reveal from '../ui/Reveal';
+import MobileCarousel from '../ui/MobileCarousel';
 import Button from '../ui/Button';
 import { useContent } from '../../context/ContentContext';
 import { formatCurrency, formatDuration } from '../../utils/format';
@@ -26,7 +27,7 @@ export default function Membership() {
           title="Choose your plan"
           description="Simple, transparent pricing. No hidden charges. Walk in and start training."
         />
-        <div className={`grid gap-5 sm:grid-cols-2 ${cols}`}>
+        <MobileCarousel label="Membership plans" gridClass={`pt-3 sm:grid sm:grid-cols-2 sm:gap-5 sm:pt-0 ${cols}`}>
           {plans.map((plan, i) => {
             const featured = plan.recommended;
             return (
@@ -66,7 +67,7 @@ export default function Membership() {
               </Reveal>
             );
           })}
-        </div>
+        </MobileCarousel>
       </div>
     </section>
   );

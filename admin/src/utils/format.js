@@ -109,3 +109,8 @@ const WEBSITE_BASE = String(import.meta.env.VITE_WEBSITE_URL || '').replace(/\/$
 export function mediaUrl(url) {
   return url && url.startsWith('/') ? `${WEBSITE_BASE}${url}` : url;
 }
+
+/** URL of a file in admin/public, respecting the deploy base path (e.g. "/admin/"). */
+export function assetUrl(path) {
+  return `${import.meta.env.BASE_URL}${String(path).replace(/^\//, '')}`;
+}

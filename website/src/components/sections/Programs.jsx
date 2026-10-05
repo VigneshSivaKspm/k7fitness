@@ -1,6 +1,7 @@
 import { Clock, Dumbbell } from 'lucide-react';
 import SectionHeading from '../ui/SectionHeading';
 import Reveal from '../ui/Reveal';
+import MobileCarousel from '../ui/MobileCarousel';
 import { useContent } from '../../context/ContentContext';
 
 export default function Programs() {
@@ -16,7 +17,7 @@ export default function Programs() {
           title="Programs built for results"
           description="Structured coaching for every goal and every level, from your first session to your next personal best."
         />
-        <div className={`grid gap-5 sm:grid-cols-2 ${programs.length === 4 ? 'lg:grid-cols-4' : 'lg:grid-cols-3'}`}>
+        <MobileCarousel label="Training programs" gridClass={`sm:grid sm:grid-cols-2 sm:gap-5 ${programs.length === 4 ? 'lg:grid-cols-4' : 'lg:grid-cols-3'}`}>
           {programs.map((p, i) => (
             <Reveal
               as="article"
@@ -57,7 +58,7 @@ export default function Programs() {
               </div>
             </Reveal>
           ))}
-        </div>
+        </MobileCarousel>
       </div>
     </section>
   );

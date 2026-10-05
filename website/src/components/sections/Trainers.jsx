@@ -1,6 +1,7 @@
 import { UserRound } from 'lucide-react';
 import SectionHeading from '../ui/SectionHeading';
 import Reveal from '../ui/Reveal';
+import MobileCarousel from '../ui/MobileCarousel';
 import { InstagramIcon } from '../ui/SocialIcons';
 import { useContent } from '../../context/ContentContext';
 
@@ -17,7 +18,7 @@ export default function Trainers() {
           title="Train with the best"
           description="Certified, experienced coaches who will push you, correct you and keep you accountable."
         />
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <MobileCarousel label="Our coaches" itemClass="w-[76%]" gridClass="sm:grid sm:grid-cols-2 sm:gap-5 lg:grid-cols-4">
           {trainers.map((t, i) => (
             <Reveal as="article" key={t.id} delay={(i % 4) * 80} className="card-k7 card-k7-hover group overflow-hidden">
               <div className="relative aspect-[4/5] overflow-hidden bg-surface">
@@ -57,7 +58,7 @@ export default function Trainers() {
               </div>
             </Reveal>
           ))}
-        </div>
+        </MobileCarousel>
       </div>
     </section>
   );

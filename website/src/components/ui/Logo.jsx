@@ -26,7 +26,7 @@ export default function Logo({ size = 'md', showText = true, className = '' }) {
       {showText && (
         <span className="flex flex-col leading-none">
           <span className="font-display text-2xl tracking-wider text-snow">
-            K7 <span className="text-brand-bright">Fitness</span>
+            <span className="text-brand-bright">Fitness</span>
           </span>
           <span className="mt-0.5 text-[0.6rem] font-bold uppercase tracking-[0.3em] text-muted">
             Studio &amp; Gym

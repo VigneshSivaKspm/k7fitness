@@ -11,7 +11,7 @@ export default function App() {
   if (!isFirebaseConfigured) return <SetupNotice />;
   return (
     <ErrorBoundary>
-      <BrowserRouter>
+      <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '') || undefined}>
         <ToastProvider>
           <ConfirmProvider>
             <AuthProvider>

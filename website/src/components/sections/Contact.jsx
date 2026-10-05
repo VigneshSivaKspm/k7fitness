@@ -117,7 +117,7 @@ export default function Contact() {
                 <iframe
                   title={`Map showing ${contact.gymName}`}
                   src={embed}
-                  className="h-72 w-full grayscale-[60%] invert-[0.9] hue-rotate-180"
+                  className="h-72 w-full bg-white"
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                   allowFullScreen

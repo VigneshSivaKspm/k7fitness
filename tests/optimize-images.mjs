@@ -58,7 +58,7 @@ await page.setContent(`
     <img src="${dataUrl(`${DIR}/og-image.jpg`)}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
     <div style="position:absolute;left:72px;top:0;bottom:0;display:flex;flex-direction:column;justify-content:center;gap:22px">
       <img src="${dataUrl(resolve('../website/public/brand/k7-mark.svg'))}" style="height:120px;width:auto;align-self:flex-start">
-      <div style="font-family:'Bebas Neue';font-size:92px;line-height:.9;color:#fff;letter-spacing:2px">K7 <span style="color:#D20A35">FITNESS</span></div>
+      <div style="font-family:'Bebas Neue';font-size:92px;line-height:.9;color:#fff;letter-spacing:2px"><span style="color:#D20A35">FITNESS</span></div>
       <div style="font-family:Manrope;font-weight:700;font-size:20px;letter-spacing:9px;color:#8B8B8B">STUDIO &amp; GYM</div>
       <div style="width:64px;height:4px;background:#A10825"></div>
       <div style="font-family:'Bebas Neue';font-size:46px;color:#fff;letter-spacing:2px">TRAIN HARD. <span style="color:#D20A35">LIVE STRONG.</span></div>

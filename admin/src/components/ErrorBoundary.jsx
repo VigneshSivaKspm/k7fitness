@@ -1,3 +1,4 @@
+import { assetUrl } from '../utils/format';
 import { Component } from 'react';
 
 /** Last-resort guard so an unexpected render error never leaves a blank screen. */
@@ -18,7 +19,7 @@ export default class ErrorBoundary extends Component {
     return (
       <div className="flex min-h-svh items-center justify-center bg-canvas p-6">
         <div className="card max-w-md p-8 text-center">
-          <img src="/brand/k7-mark.svg" alt="" className="mx-auto h-10 rounded bg-ink p-1.5" />
+          <img src={assetUrl('brand/k7-mark.svg')} alt="" className="mx-auto h-10 rounded bg-ink p-1.5" />
           <h1 className="mt-5 text-lg font-semibold text-zinc-900">
             {chunkError ? 'A new version is available' : 'Something went wrong'}
           </h1>
