@@ -1,0 +1,16 @@
+{
+  "appId": "com.k7fitness.admin",
+  "appName": "K7 Admin",
+  "webDir": "dist",
+  "android": {
+    "backgroundColor": "#08080A",
+    "allowMixedContent": false
+  },
+  "plugins": {
+    "SystemBars": {
+      "insetsHandling": "css",
+      "initialViewportFitValueHint": "cover",
+      "style": "DARK"
+    }
+  }
+}
