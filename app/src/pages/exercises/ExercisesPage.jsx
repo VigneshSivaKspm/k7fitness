@@ -14,7 +14,6 @@ import {
   Plus,
   RefreshCw,
   Search,
-  Sparkles,
   Trash2,
   Video,
   Wrench,
@@ -31,7 +30,6 @@ import {
   listEquipment,
   listExercises,
   saveExercise,
-  seedDefaultExercises,
 } from '../../services/equipmentService';
 import MachineDemoModal from '../../components/equipment/MachineDemoModal';
 import VideoUpload from '../../components/ui/VideoUpload';
@@ -91,23 +89,6 @@ export default function ExercisesPage() {
   useEffect(() => {
     loadData();
   }, []);
-
-  const handleSeed = async () => {
-    const ok = await confirm({
-      title: 'Load Starter Exercise Library?',
-      message: 'This will seed comprehensive form cues, execution steps, and default exercises.',
-      confirmText: 'Load Exercises',
-    });
-    if (!ok) return;
-
-    try {
-      await seedDefaultExercises();
-      toast.success('Starter exercise library loaded successfully.');
-      await loadData();
-    } catch {
-      toast.error('Failed to seed exercises.');
-    }
-  };
 
   const handleDelete = async (item) => {
     const ok = await confirm({
@@ -183,6 +164,14 @@ export default function ExercisesPage() {
       setupGuide: matchingEquipment?.setupGuide || exercise.setup,
       safetyNotes: matchingEquipment?.safetyNotes || exercise.mistakes,
       videoUrl: exercise.videoUrl || matchingEquipment?.videoUrl,
+      animationUrl:
+        exercise.animationUrl ||
+        exercise.gifUrl ||
+        exercise.rawGifUrl ||
+        matchingEquipment?.animationUrl ||
+        matchingEquipment?.gifUrl,
+      gifUrl: exercise.gifUrl || matchingEquipment?.gifUrl,
+      rawGifUrl: exercise.rawGifUrl || matchingEquipment?.rawGifUrl,
       exercises: [exercise],
     });
   };
@@ -214,15 +203,6 @@ export default function ExercisesPage() {
         description="Add gym exercises, specify the required machine or equipment, configure real-time demonstration videos, and train members with proper form."
         actions={
           <div className="flex flex-wrap items-center gap-2">
-            <Button
-              variant="secondary"
-              size="sm"
-              icon={Sparkles}
-              onClick={handleSeed}
-              title="Load starter exercises"
-            >
-              Load Starter Library
-            </Button>
             <Button size="sm" icon={Plus} onClick={handleOpenAdd}>
               Add Exercise
             </Button>
@@ -334,192 +314,258 @@ export default function ExercisesPage() {
             <Button size="sm" icon={Plus} onClick={handleOpenAdd}>
               Add Exercise
             </Button>
-            <Button size="sm" variant="secondary" icon={Sparkles} onClick={handleSeed}>
-              Load Starter Library
-            </Button>
           </div>
         </div>
       ) : viewMode === 'list' ? (
         /* High-density Modern List View */
+        /* High-density Modern List View */
         <div className="rounded-3xl border border-zinc-200 bg-white overflow-hidden shadow-xs divide-y divide-zinc-100">
-          {filtered.map((item) => (
-            <div
-              key={item.id}
-              className="p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-zinc-50/70 transition"
-            >
-              <div className="flex items-start sm:items-center gap-4 min-w-0 flex-1">
-                {/* Movement Icon */}
-                <div className="flex size-12 sm:size-14 items-center justify-center rounded-2xl bg-zinc-950 text-white shrink-0 shadow-sm shadow-zinc-950/20">
-                  <Flame className="size-6 text-red-500" />
+          {filtered.map((item) => {
+            const hasAnim = Boolean(item.animationUrl || item.gifUrl || item.rawGifUrl);
+            const animSrc = item.animationUrl || item.gifUrl || item.rawGifUrl;
+
+            return (
+              <div
+                key={item.id}
+                className="p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-zinc-50/70 transition"
+              >
+                <div className="flex items-start sm:items-center gap-4 min-w-0 flex-1">
+                  {/* Movement Icon or Looping Thumbnail */}
+                  {hasAnim ? (
+                    <div
+                      onClick={() => handleOpenLiveDemo(item)}
+                      className="relative size-14 sm:size-16 rounded-2xl bg-zinc-950 overflow-hidden shrink-0 border border-zinc-800 shadow-md flex items-center justify-center group/thumb cursor-pointer ring-2 ring-red-500/20 hover:ring-red-500 transition"
+                      title="Click to view full execution demo"
+                    >
+                      <img
+                        src={encodeURI(animSrc)}
+                        alt={item.name}
+                        loading="lazy"
+                        className="h-full w-full object-cover transition-transform duration-300 group-hover/thumb:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover/thumb:opacity-100 transition flex items-end justify-center pb-1">
+                        <Play className="size-3.5 fill-white text-white" />
+                      </div>
+                      <span className="absolute top-1 right-1 flex size-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full size-2 bg-red-500"></span>
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="flex size-14 sm:size-16 items-center justify-center rounded-2xl bg-zinc-950 text-white shrink-0 shadow-sm shadow-zinc-950/20">
+                      <Flame className="size-6 text-red-500" />
+                    </div>
+                  )}
+
+                  {/* Details */}
+                  <div className="min-w-0 flex-1 space-y-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="rounded-md bg-red-50 text-red-600 font-extrabold text-[0.62rem] px-2 py-0.5 uppercase tracking-wide ring-1 ring-red-100">
+                        {item.muscleGroup || 'General'}
+                      </span>
+                      <span className="rounded-md bg-zinc-100 text-zinc-700 font-bold text-[0.62rem] px-2 py-0.5">
+                        {item.difficulty || 'Beginner'}
+                      </span>
+                      <span className="inline-flex items-center gap-1 rounded-md bg-zinc-100 text-zinc-800 text-[0.65rem] font-bold px-2 py-0.5 border border-zinc-200">
+                        <Wrench className="size-3 text-zinc-500" /> {item.equipmentName || 'Free Weights / Custom'}
+                      </span>
+                      {hasAnim && (
+                        <span className="inline-flex items-center gap-1 rounded-md bg-red-600 text-white text-[0.62rem] font-black px-2 py-0.5 shadow-2xs">
+                          <Sparkles className="size-3" /> Animated Demo
+                        </span>
+                      )}
+                      {item.videoUrl && !hasAnim && (
+                        <span className="inline-flex items-center gap-1 text-emerald-600 font-bold text-[0.65rem]">
+                          <Video className="size-3" /> Video Ready
+                        </span>
+                      )}
+                    </div>
+
+                    <h3 className="font-black text-sm text-zinc-950 truncate">
+                      {item.name}
+                    </h3>
+
+                    <div className="flex flex-wrap items-center gap-3 text-xs text-zinc-600">
+                      {item.targetMuscle && (
+                        <span>
+                          Target: <strong className="text-red-600 font-bold">{item.targetMuscle}</strong>
+                        </span>
+                      )}
+                      {item.cues && (
+                        <span className="text-zinc-500 italic truncate max-w-md">
+                          “{item.cues}”
+                        </span>
+                      )}
+                    </div>
+                  </div>
                 </div>
 
-                {/* Details */}
-                <div className="min-w-0 flex-1 space-y-1">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="rounded-md bg-red-50 text-red-600 font-extrabold text-[0.62rem] px-2 py-0.5 uppercase tracking-wide ring-1 ring-red-100">
-                      {item.muscleGroup || 'General'}
-                    </span>
-                    <span className="rounded-md bg-zinc-100 text-zinc-700 font-bold text-[0.62rem] px-2 py-0.5">
-                      {item.difficulty || 'Beginner'}
-                    </span>
-                    <span className="inline-flex items-center gap-1 rounded-md bg-zinc-100 text-zinc-800 text-[0.65rem] font-bold px-2 py-0.5 border border-zinc-200">
-                      <Wrench className="size-3 text-zinc-500" /> {item.equipmentName || 'Free Weights / Custom'}
-                    </span>
-                    {item.videoUrl && (
-                      <span className="inline-flex items-center gap-1 text-emerald-600 font-bold text-[0.65rem]">
-                        <Video className="size-3" /> Video Demo Ready
-                      </span>
-                    )}
-                  </div>
-
-                  <h3 className="font-black text-sm text-zinc-950 truncate">
-                    {item.name}
-                  </h3>
-
-                  <div className="flex flex-wrap items-center gap-3 text-xs text-zinc-600">
-                    {item.targetMuscle && (
-                      <span>
-                        Target: <strong className="text-red-600 font-bold">{item.targetMuscle}</strong>
-                      </span>
-                    )}
-                    {item.cues && (
-                      <span className="text-zinc-500 italic truncate max-w-md">
-                        “{item.cues}”
-                      </span>
-                    )}
-                  </div>
+                {/* Actions Right */}
+                <div className="flex items-center gap-2 shrink-0 self-end md:self-center">
+                  <Button
+                    size="sm"
+                    variant={hasAnim ? 'primary' : 'secondary'}
+                    icon={Play}
+                    onClick={() => handleOpenLiveDemo(item)}
+                  >
+                    {hasAnim ? 'View Demo' : 'Live Demo'}
+                  </Button>
+                  <button
+                    type="button"
+                    onClick={() => handleOpenEdit(item)}
+                    className="p-2 rounded-xl text-zinc-500 hover:bg-zinc-100 hover:text-zinc-950 transition border border-zinc-200"
+                    title="Edit exercise"
+                  >
+                    <Pencil className="size-4" />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleDelete(item)}
+                    className="p-2 rounded-xl text-zinc-400 hover:bg-red-50 hover:text-red-600 transition border border-zinc-200"
+                    title="Delete exercise"
+                  >
+                    <Trash2 className="size-4" />
+                  </button>
                 </div>
               </div>
-
-              {/* Actions Right */}
-              <div className="flex items-center gap-2 shrink-0 self-end md:self-center">
-                <Button
-                  size="sm"
-                  variant="secondary"
-                  icon={Play}
-                  onClick={() => handleOpenLiveDemo(item)}
-                >
-                  Live Demo
-                </Button>
-                <button
-                  type="button"
-                  onClick={() => handleOpenEdit(item)}
-                  className="p-2 rounded-xl text-zinc-500 hover:bg-zinc-100 hover:text-zinc-950 transition border border-zinc-200"
-                  title="Edit exercise"
-                >
-                  <Pencil className="size-4" />
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleDelete(item)}
-                  className="p-2 rounded-xl text-zinc-400 hover:bg-red-50 hover:text-red-600 transition border border-zinc-200"
-                  title="Delete exercise"
-                >
-                  <Trash2 className="size-4" />
-                </button>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       ) : (
         /* Grid View */
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((item) => (
-            <div
-              key={item.id}
-              className="group rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm hover:border-zinc-300 hover:shadow-md transition flex flex-col justify-between"
-            >
-              <div>
-                {/* Header Chips */}
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex flex-wrap items-center gap-1.5">
-                    <span className="rounded-lg bg-red-50 text-red-600 font-extrabold text-[0.65rem] px-2 py-0.5 uppercase tracking-wide ring-1 ring-red-100">
-                      {item.muscleGroup || 'General'}
-                    </span>
-                    <span className="rounded-lg bg-zinc-100 text-zinc-700 font-bold text-[0.65rem] px-2 py-0.5">
-                      {item.difficulty || 'Beginner'}
-                    </span>
-                  </div>
+          {filtered.map((item) => {
+            const hasAnim = Boolean(item.animationUrl || item.gifUrl || item.rawGifUrl);
+            const animSrc = item.animationUrl || item.gifUrl || item.rawGifUrl;
 
-                  <div className="flex items-center gap-1">
-                    <button
-                      type="button"
-                      onClick={() => handleOpenEdit(item)}
-                      className="p-1.5 text-zinc-400 hover:text-zinc-900 rounded-lg hover:bg-zinc-100 transition"
-                      title="Edit exercise"
+            return (
+              <div
+                key={item.id}
+                className="group rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm hover:border-zinc-300 hover:shadow-md transition flex flex-col justify-between"
+              >
+                <div>
+                  {/* Looping Media Banner (if available) */}
+                  {hasAnim && (
+                    <div
+                      className="relative h-44 w-full rounded-2xl bg-zinc-950 overflow-hidden mb-3.5 border border-zinc-900 shadow-inner cursor-pointer group/media flex items-center justify-center"
+                      onClick={() => handleOpenLiveDemo(item)}
                     >
-                      <Pencil className="size-3.5" />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => handleDelete(item)}
-                      className="p-1.5 text-zinc-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition"
-                      title="Delete exercise"
-                    >
-                      <Trash2 className="size-3.5" />
-                    </button>
-                  </div>
-                </div>
-
-                {/* Title */}
-                <h3 className="text-sm font-black text-zinc-950 mt-2.5 leading-snug group-hover:text-red-600 transition">
-                  {item.name}
-                </h3>
-
-                {/* Target Muscle */}
-                {item.targetMuscle && (
-                  <p className="text-xs font-semibold text-zinc-600 mt-1">
-                    Target: <span className="text-red-600 font-bold">{item.targetMuscle}</span>
-                  </p>
-                )}
-
-                {/* Used Machine / Equipment Tag */}
-                <div className="mt-3 rounded-2xl bg-zinc-50 border border-zinc-100 p-2.5 flex items-center gap-2">
-                  <div className="flex size-7 items-center justify-center rounded-xl bg-zinc-200/70 text-zinc-800 shrink-0">
-                    <Wrench className="size-3.5" />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <span className="text-[0.6rem] font-bold uppercase tracking-wider text-zinc-400 block leading-tight">
-                      Equipment Used
-                    </span>
-                    <span className="text-xs font-bold text-zinc-900 truncate block">
-                      {item.equipmentName || 'Free Weights / Custom'}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Trainer Cue Snippet */}
-                {item.cues && (
-                  <div className="mt-2.5 rounded-xl bg-amber-50/70 border border-amber-100 p-2 text-[0.7rem] text-amber-900 flex items-start gap-1.5">
-                    <Flame className="size-3.5 text-amber-600 shrink-0 mt-0.5" />
-                    <span className="line-clamp-2">“{item.cues}”</span>
-                  </div>
-                )}
-              </div>
-
-              {/* Action Buttons */}
-              <div className="mt-4 pt-3 border-t border-zinc-100 flex items-center justify-between">
-                <span className="text-[0.68rem] font-mono text-zinc-400">
-                  {item.videoUrl ? (
-                    <span className="inline-flex items-center gap-1 text-emerald-600 font-bold">
-                      <Video className="size-3" /> Video Demo Ready
-                    </span>
-                  ) : (
-                    'Realtime Tempo Demo'
+                      <img
+                        src={encodeURI(animSrc)}
+                        alt={item.name}
+                        loading="lazy"
+                        className="h-full w-full object-contain p-2 transition-transform duration-300 group-hover/media:scale-105"
+                      />
+                      <div className="absolute top-2 left-2 flex items-center gap-1.5 rounded-full bg-black/75 backdrop-blur-xs px-2.5 py-0.5 text-[0.62rem] font-bold text-white border border-white/10">
+                        <span className="size-1.5 rounded-full bg-red-500 animate-pulse" />
+                        <span>PRO FORM DEMO</span>
+                      </div>
+                      <div className="absolute bottom-2 right-2 rounded-xl bg-red-600/90 text-white px-2.5 py-1 text-[0.65rem] font-bold flex items-center gap-1 opacity-90 shadow-md">
+                        <Play className="size-3 fill-white" /> View Execution
+                      </div>
+                    </div>
                   )}
-                </span>
 
-                <Button
-                  size="sm"
-                  variant="secondary"
-                  icon={Play}
-                  onClick={() => handleOpenLiveDemo(item)}
-                >
-                  Live Demo
-                </Button>
+                  {/* Header Chips */}
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <span className="rounded-lg bg-red-50 text-red-600 font-extrabold text-[0.65rem] px-2 py-0.5 uppercase tracking-wide ring-1 ring-red-100">
+                        {item.muscleGroup || 'General'}
+                      </span>
+                      <span className="rounded-lg bg-zinc-100 text-zinc-700 font-bold text-[0.65rem] px-2 py-0.5">
+                        {item.difficulty || 'Beginner'}
+                      </span>
+                      {hasAnim && (
+                        <span className="rounded-lg bg-red-600 text-white font-extrabold text-[0.62rem] px-2 py-0.5 shadow-2xs">
+                          Loop Demo
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="flex items-center gap-1">
+                      <button
+                        type="button"
+                        onClick={() => handleOpenEdit(item)}
+                        className="p-1.5 text-zinc-400 hover:text-zinc-900 rounded-lg hover:bg-zinc-100 transition"
+                        title="Edit exercise"
+                      >
+                        <Pencil className="size-3.5" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(item)}
+                        className="p-1.5 text-zinc-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition"
+                        title="Delete exercise"
+                      >
+                        <Trash2 className="size-3.5" />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Title */}
+                  <h3 className="text-sm font-black text-zinc-950 mt-2.5 leading-snug group-hover:text-red-600 transition">
+                    {item.name}
+                  </h3>
+
+                  {/* Target Muscle */}
+                  {item.targetMuscle && (
+                    <p className="text-xs font-semibold text-zinc-600 mt-1">
+                      Target: <span className="text-red-600 font-bold">{item.targetMuscle}</span>
+                    </p>
+                  )}
+
+                  {/* Used Machine / Equipment Tag */}
+                  <div className="mt-3 rounded-2xl bg-zinc-50 border border-zinc-100 p-2.5 flex items-center gap-2">
+                    <div className="flex size-7 items-center justify-center rounded-xl bg-zinc-200/70 text-zinc-800 shrink-0">
+                      <Wrench className="size-3.5" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <span className="text-[0.6rem] font-bold uppercase tracking-wider text-zinc-400 block leading-tight">
+                        Equipment Used
+                      </span>
+                      <span className="text-xs font-bold text-zinc-900 truncate block">
+                        {item.equipmentName || 'Free Weights / Custom'}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Trainer Cue Snippet */}
+                  {item.cues && (
+                    <div className="mt-2.5 rounded-xl bg-amber-50/70 border border-amber-100 p-2 text-[0.7rem] text-amber-900 flex items-start gap-1.5">
+                      <Flame className="size-3.5 text-amber-600 shrink-0 mt-0.5" />
+                      <span className="line-clamp-2">“{item.cues}”</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Action Buttons */}
+                <div className="mt-4 pt-3 border-t border-zinc-100 flex items-center justify-between">
+                  <span className="text-[0.68rem] font-mono text-zinc-400">
+                    {hasAnim ? (
+                      <span className="inline-flex items-center gap-1 text-red-600 font-bold">
+                        <Sparkles className="size-3" /> Form Loop
+                      </span>
+                    ) : item.videoUrl ? (
+                      <span className="inline-flex items-center gap-1 text-emerald-600 font-bold">
+                        <Video className="size-3" /> Video Demo Ready
+                      </span>
+                    ) : (
+                      'Realtime Tempo Demo'
+                    )}
+                  </span>
+
+                  <Button
+                    size="sm"
+                    variant={hasAnim ? 'primary' : 'secondary'}
+                    icon={Play}
+                    onClick={() => handleOpenLiveDemo(item)}
+                  >
+                    {hasAnim ? 'View Demo' : 'Live Demo'}
+                  </Button>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 

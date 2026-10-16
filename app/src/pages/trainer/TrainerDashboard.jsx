@@ -359,6 +359,21 @@ export default function TrainerDashboard() {
             </div>
           )}
         </div>
+
+        {/* Company Credit */}
+        <footer className="mt-10 pt-6 pb-4 border-t border-zinc-200/80 text-center text-xs text-zinc-500">
+          <p>
+            Crafted By{' '}
+            <a
+              href="https://www.legendaryone.in/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-yellow-500 hover:text-yellow-600 transition-colors underline decoration-yellow-500/40"
+            >
+              Legendary One
+            </a>
+          </p>
+        </footer>
       </main>
 
       {/* Workout & Diet Assignment Dialog */}

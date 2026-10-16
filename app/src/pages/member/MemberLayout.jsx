@@ -160,6 +160,21 @@ export default function MemberLayout() {
         {/* Scrollable Main Application Content Area */}
         <main className="flex-1 w-full p-3.5 pb-28 space-y-4 overflow-y-auto">
           <Outlet />
+
+          {/* Company Credit */}
+          <footer className="pt-6 pb-2 text-center text-xs text-zinc-500">
+            <p>
+              Crafted By{' '}
+              <a
+                href="https://www.legendaryone.in/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-bold text-yellow-500 hover:text-yellow-600 transition-colors underline decoration-yellow-500/40"
+              >
+                Legendary One
+              </a>
+            </p>
+          </footer>
         </main>
 
         {/* Modern Mobile Bottom Navigation Bar (Docked at Bottom) */}

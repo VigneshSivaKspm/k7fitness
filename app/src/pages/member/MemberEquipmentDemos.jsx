@@ -111,36 +111,70 @@ export default function MemberEquipmentDemos() {
         </div>
       ) : filtered.length > 0 ? (
         <div className="space-y-3">
-          {filtered.map((item) => (
-            <div
-              key={item.id}
-              onClick={() => setActiveDemo(item)}
-              className="rounded-3xl border border-zinc-200/90 bg-white p-4 shadow-sm shadow-zinc-200/40 hover:border-zinc-300 transition cursor-pointer select-none space-y-3"
-            >
-              <div className="flex items-start justify-between gap-3">
-                <div className="flex items-start gap-3">
-                  <div className="flex size-11 items-center justify-center rounded-2xl bg-zinc-950 text-white font-bold shrink-0">
-                    <Dumbbell className="size-5 text-red-500" />
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-1.5">
-                      <span className="rounded-md bg-red-50 text-red-600 text-[0.62rem] font-bold px-1.5 py-0.5 uppercase tracking-wide">
-                        {item.category}
-                      </span>
-                      <span className="text-[0.65rem] text-zinc-400 font-medium">
-                        {item.quantity || 1} in studio
-                      </span>
-                    </div>
-                    <h3 className="font-extrabold text-sm text-zinc-950 mt-0.5 leading-tight">
-                      {item.name}
-                    </h3>
-                  </div>
-                </div>
+          {filtered.map((item) => {
+            const animSrc =
+              item.animationUrl ||
+              item.gifUrl ||
+              item.exercises?.find((e) => e.animationUrl || e.gifUrl)?.animationUrl ||
+              item.exercises?.find((e) => e.animationUrl || e.gifUrl)?.gifUrl;
 
-                <span className="flex size-7 items-center justify-center rounded-full bg-zinc-100 text-zinc-600 hover:bg-zinc-200 transition shrink-0">
-                  <ChevronRight className="size-4" />
-                </span>
-              </div>
+            return (
+              <div
+                key={item.id}
+                onClick={() => setActiveDemo(item)}
+                className="rounded-3xl border border-zinc-200/90 bg-white p-4 shadow-sm shadow-zinc-200/40 hover:border-zinc-300 hover:shadow-md transition cursor-pointer select-none space-y-3"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-start gap-3">
+                    {animSrc ? (
+                      <div className="relative size-14 rounded-2xl bg-zinc-950 overflow-hidden shrink-0 border border-zinc-800 shadow-sm ring-2 ring-red-500/20">
+                        <img
+                          src={encodeURI(animSrc)}
+                          alt={item.name}
+                          loading="lazy"
+                          className="h-full w-full object-cover"
+                        />
+                        <div className="absolute bottom-0 inset-x-0 bg-red-600/90 text-white text-[0.52rem] font-black uppercase text-center py-0.5 tracking-tighter">
+                          DEMO LOOP
+                        </div>
+                      </div>
+                    ) : item.imageUrl ? (
+                      <div className="size-14 rounded-2xl bg-zinc-900 overflow-hidden shrink-0 border border-zinc-200">
+                        <img
+                          src={encodeURI(item.imageUrl)}
+                          alt={item.name}
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
+                    ) : (
+                      <div className="flex size-14 items-center justify-center rounded-2xl bg-zinc-950 text-white font-bold shrink-0">
+                        <Dumbbell className="size-5 text-red-500" />
+                      </div>
+                    )}
+                    <div>
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        <span className="rounded-md bg-red-50 text-red-600 text-[0.62rem] font-bold px-1.5 py-0.5 uppercase tracking-wide">
+                          {item.category}
+                        </span>
+                        {animSrc && (
+                          <span className="rounded-md bg-red-600 text-white text-[0.58rem] font-black px-1.5 py-0.5 uppercase tracking-tight shadow-2xs">
+                            🎬 60fps Form
+                          </span>
+                        )}
+                        <span className="text-[0.65rem] text-zinc-400 font-medium">
+                          {item.quantity || 1} in studio
+                        </span>
+                      </div>
+                      <h3 className="font-extrabold text-sm text-zinc-950 mt-1 leading-tight">
+                        {item.name}
+                      </h3>
+                    </div>
+                  </div>
+
+                  <span className="flex size-7 items-center justify-center rounded-full bg-zinc-100 text-zinc-600 hover:bg-zinc-200 transition shrink-0">
+                    <ChevronRight className="size-4" />
+                  </span>
+                </div>
 
               {/* Possible Exercises List Pills */}
               {item.exercises?.length > 0 && (
@@ -170,7 +204,8 @@ export default function MemberEquipmentDemos() {
                 <span>Details →</span>
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       ) : (
         <div className="py-12 text-center px-4">

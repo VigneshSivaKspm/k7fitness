@@ -146,46 +146,117 @@ export default function MachineDemoModal({ equipment, open, onClose }) {
                     </div>
                   </div>
 
-                  {/* Visual Simulation / Video Demonstration Card */}
+                  {/* Visual Simulation / Animated Demonstration / Video Demonstration Card */}
                   {(() => {
-                    const activeVideoUrl =
+                    const animationSrc =
+                      currentExercise?.animationUrl ||
+                      currentExercise?.gifUrl ||
+                      currentExercise?.rawGifUrl ||
+                      equipment?.animationUrl ||
+                      equipment?.gifUrl;
+
+                    const rawVideoUrl =
                       currentExercise?.videoUrl ||
                       currentExercise?.video?.url ||
                       equipment?.videoUrl ||
                       equipment?.video?.url;
+
+                    const isVideoImage =
+                      rawVideoUrl &&
+                      (rawVideoUrl.endsWith('.webp') ||
+                        rawVideoUrl.endsWith('.gif') ||
+                        rawVideoUrl.endsWith('.png') ||
+                        rawVideoUrl.endsWith('.jpg') ||
+                        rawVideoUrl.includes('/Major_Male_Exercise_GIFs/'));
+
+                    const activeAnimationUrl = animationSrc || (isVideoImage ? rawVideoUrl : null);
+                    const activeVideoUrl = !isVideoImage ? rawVideoUrl : null;
                     const hasVideo = Boolean(activeVideoUrl);
-                    const isYouTube = hasVideo && (activeVideoUrl.includes('youtube.com') || activeVideoUrl.includes('youtu.be'));
+                    const hasAnimation = Boolean(activeAnimationUrl);
+                    const isYouTube =
+                      hasVideo &&
+                      (activeVideoUrl.includes('youtube.com') || activeVideoUrl.includes('youtu.be'));
 
                     return (
-                      <div className="relative overflow-hidden rounded-2xl bg-zinc-950 text-white p-5 border border-zinc-900 shadow-inner">
-                        <div className="flex items-center justify-between mb-3 border-b border-zinc-800/80 pb-2">
-                          <span className="text-xs font-bold uppercase tracking-wider text-red-400 flex items-center gap-1.5">
-                            <Play className="size-3.5 fill-red-400 text-red-400" /> Real-time Movement Execution Demo
+                      <div className="relative overflow-hidden rounded-3xl bg-zinc-950 text-white p-4 sm:p-5 border border-zinc-800 shadow-2xl">
+                        {/* Ambient glow behind demonstration */}
+                        <div className="pointer-events-none absolute -top-12 -right-12 size-48 rounded-full bg-red-600/15 blur-3xl" />
+
+                        {/* Card Header & Mode Switcher */}
+                        <div className="flex flex-wrap items-center justify-between gap-2 mb-3 border-b border-zinc-800/80 pb-2.5 relative z-10">
+                          <span className="text-xs font-black uppercase tracking-wider text-red-400 flex items-center gap-1.5">
+                            <span className="flex size-2 relative">
+                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                              <span className="relative inline-flex rounded-full size-2 bg-red-500"></span>
+                            </span>
+                            {hasAnimation ? 'Interactive Movement Execution Loop' : 'Movement Form & Tempo'}
                           </span>
-                          {hasVideo ? (
-                            <div className="flex items-center rounded-lg bg-zinc-900 p-0.5 text-[0.65rem] font-bold">
+
+                          <div className="flex items-center rounded-xl bg-zinc-900 border border-zinc-800 p-0.5 text-[0.65rem] font-bold">
+                            {hasAnimation && (
+                              <button
+                                type="button"
+                                onClick={() => setViewMode('animation')}
+                                className={`rounded-lg px-2.5 py-1 transition flex items-center gap-1 ${
+                                  viewMode !== 'video' && viewMode !== 'tempo'
+                                    ? 'bg-red-600 text-white shadow-sm'
+                                    : 'text-zinc-400 hover:text-white'
+                                }`}
+                              >
+                                <Sparkles className="size-3" /> Form Loop
+                              </button>
+                            )}
+                            {hasVideo && (
                               <button
                                 type="button"
                                 onClick={() => setViewMode('video')}
-                                className={`rounded px-2 py-0.5 transition ${viewMode === 'video' ? 'bg-red-600 text-white' : 'text-zinc-400 hover:text-white'}`}
+                                className={`rounded-lg px-2.5 py-1 transition flex items-center gap-1 ${
+                                  viewMode === 'video'
+                                    ? 'bg-red-600 text-white shadow-sm'
+                                    : 'text-zinc-400 hover:text-white'
+                                }`}
                               >
-                                Video Demo
+                                <Video className="size-3" /> Video
                               </button>
-                              <button
-                                type="button"
-                                onClick={() => setViewMode('tempo')}
-                                className={`rounded px-2 py-0.5 transition ${viewMode === 'tempo' ? 'bg-red-600 text-white' : 'text-zinc-400 hover:text-white'}`}
-                              >
-                                Rep Cadence
-                              </button>
-                            </div>
-                          ) : (
-                            <span className="text-[0.68rem] text-zinc-400 font-mono">Continuous Tension</span>
-                          )}
+                            )}
+                            <button
+                              type="button"
+                              onClick={() => setViewMode('tempo')}
+                              className={`rounded-lg px-2.5 py-1 transition flex items-center gap-1 ${
+                                viewMode === 'tempo' || (!hasAnimation && !hasVideo)
+                                  ? 'bg-red-600 text-white shadow-sm'
+                                  : 'text-zinc-400 hover:text-white'
+                              }`}
+                            >
+                              <RotateCcw className="size-3" /> Rep Tempo
+                            </button>
+                          </div>
                         </div>
 
-                        {hasVideo && viewMode === 'video' ? (
-                          <div className="relative overflow-hidden rounded-xl bg-black aspect-video w-full my-2 flex items-center justify-center border border-zinc-800">
+                        {/* Center Display Viewport */}
+                        {hasAnimation && viewMode !== 'video' && viewMode !== 'tempo' ? (
+                          <div className="relative rounded-2xl bg-gradient-to-b from-zinc-900 to-black p-3 sm:p-4 my-2 border border-zinc-800 flex flex-col items-center justify-center">
+                            <div className="relative max-h-72 sm:max-h-80 w-full flex items-center justify-center overflow-hidden rounded-xl">
+                              <img
+                                src={encodeURI(activeAnimationUrl)}
+                                alt={currentExercise.name}
+                                className="max-h-72 sm:max-h-80 w-auto object-contain rounded-xl shadow-2xl filter drop-shadow-[0_12px_24px_rgba(0,0,0,0.6)]"
+                              />
+                            </div>
+
+                            {/* Form Loop Quality Badge */}
+                            <div className="mt-3 w-full flex flex-wrap items-center justify-between gap-2 px-1 text-[0.68rem]">
+                              <div className="flex items-center gap-1.5 text-zinc-300 font-semibold">
+                                <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                                <span>Biomechanically Accurate Male Movement Demo</span>
+                              </div>
+                              <span className="rounded-md bg-white/10 px-2 py-0.5 text-zinc-400 font-mono text-[0.62rem]">
+                                High-Speed WebP
+                              </span>
+                            </div>
+                          </div>
+                        ) : hasVideo && viewMode === 'video' ? (
+                          <div className="relative overflow-hidden rounded-2xl bg-black aspect-video w-full my-2 flex items-center justify-center border border-zinc-800">
                             {isYouTube ? (
                               <iframe
                                 src={getEmbedVideoUrl(activeVideoUrl)}
@@ -207,25 +278,52 @@ export default function MachineDemoModal({ equipment, open, onClose }) {
                             )}
                           </div>
                         ) : (
+                          /* Tempo / Cadence View */
                           <div className="py-4 text-center">
-                            <div className="inline-flex flex-col items-center justify-center p-4 rounded-2xl bg-zinc-900 border border-zinc-800/80 max-w-sm w-full">
-                              <div className="size-16 rounded-2xl bg-red-600/20 border border-red-500/40 flex items-center justify-center text-red-400 mb-2 animate-bounce">
+                            <div className="inline-flex flex-col items-center justify-center p-5 rounded-2xl bg-zinc-900 border border-zinc-800 max-w-md w-full">
+                              <div className="size-16 rounded-2xl bg-red-600/20 border border-red-500/40 flex items-center justify-center text-red-400 mb-3 animate-bounce">
                                 <Dumbbell className="size-8" />
                               </div>
-                              <p className="text-xs font-bold text-zinc-200">{currentExercise.name}</p>
-                              <p className="text-[0.68rem] text-zinc-400 mt-1">
-                                Tempo: <strong className="text-emerald-400">1s Contraction</strong> · <strong className="text-amber-400">1s Squeeze</strong> · <strong className="text-sky-400">3s Eccentric Return</strong>
-                              </p>
+                              <p className="text-sm font-black text-zinc-100">{currentExercise.name}</p>
+                              <div className="mt-3 flex items-center justify-center gap-1.5 w-full">
+                                <span className="rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 px-2.5 py-1 text-[0.68rem] font-bold">
+                                  1s Contraction
+                                </span>
+                                <span className="text-zinc-600">→</span>
+                                <span className="rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-400 px-2.5 py-1 text-[0.68rem] font-bold">
+                                  1s Peak Squeeze
+                                </span>
+                                <span className="text-zinc-600">→</span>
+                                <span className="rounded-xl bg-sky-500/15 border border-sky-500/30 text-sky-400 px-2.5 py-1 text-[0.68rem] font-bold">
+                                  3s Eccentric Return
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Rep Tempo Cadence Bar when animation is displayed */}
+                        {hasAnimation && viewMode !== 'video' && viewMode !== 'tempo' && (
+                          <div className="mt-2 rounded-xl bg-white/5 border border-white/10 p-2.5 flex flex-wrap items-center justify-between gap-2 text-[0.68rem]">
+                            <span className="font-bold text-zinc-300 flex items-center gap-1">
+                              <RotateCcw className="size-3 text-red-400" /> Prescribed Rep Cadence:
+                            </span>
+                            <div className="flex items-center gap-1.5 font-bold">
+                              <span className="text-emerald-400">1s Push/Pull</span>
+                              <span className="text-zinc-600">·</span>
+                              <span className="text-amber-400">1s Hold</span>
+                              <span className="text-zinc-600">·</span>
+                              <span className="text-sky-400">3s Slow Return</span>
                             </div>
                           </div>
                         )}
 
                         {/* Pro Cue Callout */}
                         {currentExercise.cues && (
-                          <div className="mt-3 rounded-xl bg-white/10 p-3 text-xs text-zinc-200 border border-white/5 flex items-start gap-2">
-                            <Flame className="size-4 text-amber-400 shrink-0 mt-0.5" />
+                          <div className="mt-3 rounded-2xl bg-red-950/40 p-3 text-xs text-red-200 border border-red-500/20 flex items-start gap-2.5">
+                            <Flame className="size-4 text-red-400 shrink-0 mt-0.5" />
                             <div>
-                              <strong className="text-white font-bold">Trainer Form Cue: </strong>
+                              <strong className="text-white font-bold">Master Trainer Cue: </strong>
                               <span>“{currentExercise.cues}”</span>
                             </div>
                           </div>
@@ -280,7 +378,7 @@ export default function MachineDemoModal({ equipment, open, onClose }) {
               {equipment.imageUrl && (
                 <div className="relative h-44 w-full rounded-2xl overflow-hidden border border-zinc-200 bg-zinc-100">
                   <img
-                    src={equipment.imageUrl}
+                    src={encodeURI(equipment.imageUrl)}
                     alt={equipment.name}
                     className="h-full w-full object-cover"
                   />

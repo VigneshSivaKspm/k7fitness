@@ -13,7 +13,6 @@ import {
   Plus,
   RefreshCw,
   Search,
-  Sparkles,
   Trash2,
   Video,
   Wrench,
@@ -30,7 +29,6 @@ import {
   deleteEquipment,
   listEquipment,
   saveEquipment,
-  seedDefaultEquipment,
 } from '../../services/equipmentService';
 import MachineDemoModal from '../../components/equipment/MachineDemoModal';
 import VideoUpload from '../../components/ui/VideoUpload';
@@ -71,16 +69,6 @@ export default function EquipmentPage() {
   useEffect(() => {
     loadData();
   }, []);
-
-  const handleSeed = async () => {
-    try {
-      await seedDefaultEquipment();
-      toast.success('Starter gym equipment and exercise demos loaded!');
-      await loadData();
-    } catch {
-      toast.error('Failed to seed equipment.');
-    }
-  };
 
   const handleDelete = (item) => {
     confirm({
@@ -191,15 +179,6 @@ export default function EquipmentPage() {
             >
               {showTrafficHeatmap ? 'Hide Traffic Heatmap' : 'Machine Traffic & Heatmap'}
             </Button>
-            <Button
-              variant="secondary"
-              size="sm"
-              icon={Sparkles}
-              onClick={handleSeed}
-              title="Load starter equipment"
-            >
-              Load Starter Machines
-            </Button>
             <Button size="sm" icon={Plus} onClick={handleOpenAdd}>
               Add Machine & Equipment
             </Button>
@@ -293,7 +272,7 @@ export default function EquipmentPage() {
                   <div className="relative size-16 sm:size-20 rounded-2xl bg-zinc-900 overflow-hidden shrink-0 border border-zinc-200 shadow-2xs">
                     {item.imageUrl ? (
                       <img
-                        src={item.imageUrl}
+                        src={encodeURI(item.imageUrl)}
                         alt={item.name}
                         className="h-full w-full object-cover"
                       />
@@ -401,7 +380,7 @@ export default function EquipmentPage() {
                   <div className="relative h-36 w-full bg-zinc-900 overflow-hidden">
                     {item.imageUrl ? (
                       <img
-                        src={item.imageUrl}
+                        src={encodeURI(item.imageUrl)}
                         alt={item.name}
                         className="h-full w-full object-cover opacity-85 hover:scale-105 transition duration-300"
                       />
@@ -506,10 +485,7 @@ export default function EquipmentPage() {
             {search ? 'Try clearing your search query' : 'Click below to load standard gym equipment & demos.'}
           </p>
           <div className="mt-4 flex justify-center gap-2">
-            <Button size="sm" icon={Sparkles} onClick={handleSeed}>
-              Seed Standard Gym Equipment
-            </Button>
-            <Button size="sm" variant="secondary" icon={Plus} onClick={handleOpenAdd}>
+            <Button size="sm" icon={Plus} onClick={handleOpenAdd}>
               Add Machine Manually
             </Button>
           </div>
@@ -605,11 +581,11 @@ export default function EquipmentPage() {
 
                 <div>
                   <label className="block text-xs font-bold uppercase tracking-wider text-zinc-600 mb-1">
-                    Image URL
+                    Image URL or Local Path
                   </label>
                   <input
-                    type="url"
-                    placeholder="https://... photo of machine"
+                    type="text"
+                    placeholder="e.g. /gym/45-Degree Leg Press Machine.jpg or https://..."
                     value={editorItem.imageUrl}
                     onChange={(e) => setEditorItem({ ...editorItem, imageUrl: e.target.value })}
                     className="w-full rounded-xl border border-zinc-200 px-3 py-2 text-xs font-semibold focus:border-brand focus:outline-none"

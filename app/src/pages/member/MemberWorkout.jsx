@@ -13,105 +13,18 @@ import {
   RotateCcw,
   Sparkles,
   Timer,
+  Trophy,
   Zap,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { getTrainee } from '../../services/traineeService';
 import { workoutService } from '../../services/planTemplateService';
 import { fitnessGoalLabel } from '../../constants/options';
-
-// Built-in sample routine based on goal for instant demonstration if none assigned yet
-const SAMPLE_WORKOUTS = {
-  muscle_building: {
-    name: 'K7 Hypertrophy & Muscle Split',
-    goal: 'Muscle Building',
-    level: 'Intermediate',
-    description: 'Designed for progressive overload and muscle hypertrophy across major muscle groups.',
-    days: [
-      {
-        title: 'Day 1: Chest & Triceps',
-        notes: 'Focus on full range of motion and 2-second eccentric lower.',
-        exercises: [
-          { name: 'Barbell Flat Bench Press', sets: '4', reps: '8-10', weight: 'Progressive', rest: '90s', instructions: 'Drive through feet, retract scapula' },
-          { name: 'Incline Dumbbell Press', sets: '3', reps: '10-12', weight: 'Moderate', rest: '75s', instructions: '30 degree bench angle' },
-          { name: 'Cable Chest Flyes', sets: '3', reps: '12-15', weight: 'Light/Mod', rest: '60s', instructions: 'Peak contraction squeeze' },
-          { name: 'Rope Tricep Pushdown', sets: '4', reps: '12', weight: 'Moderate', rest: '60s', instructions: 'Flare rope out at bottom' },
-          { name: 'Overhead Dumbbell Extension', sets: '3', reps: '10-12', weight: 'Moderate', rest: '60s', instructions: 'Keep elbows tucked' },
-        ],
-      },
-      {
-        title: 'Day 2: Back & Biceps',
-        notes: 'Squeeze back muscles at peak contraction; pull with elbows.',
-        exercises: [
-          { name: 'Barbell Deadlifts', sets: '4', reps: '6-8', weight: 'Heavy', rest: '120s', instructions: 'Keep neutral spine and engage core' },
-          { name: 'Wide-Grip Lat Pulldown', sets: '4', reps: '10-12', weight: 'Moderate', rest: '75s', instructions: 'Pull to upper chest' },
-          { name: 'Seated Cable Row', sets: '3', reps: '10-12', weight: 'Moderate', rest: '60s', instructions: 'Pause 1s at torso' },
-          { name: 'Standing Barbell Bicep Curls', sets: '4', reps: '10-12', weight: 'Moderate', rest: '60s', instructions: 'No swinging' },
-          { name: 'Incline Dumbbell Hammer Curls', sets: '3', reps: '12', weight: 'Light/Mod', rest: '60s', instructions: 'Focus on brachialis & forearms' },
-        ],
-      },
-      {
-        title: 'Day 3: Legs & Core Power',
-        notes: 'Warm up hip mobility thoroughly before squatting.',
-        exercises: [
-          { name: 'Barbell Back Squats', sets: '4', reps: '8-10', weight: 'Heavy', rest: '120s', instructions: 'Hit parallel safely' },
-          { name: 'Leg Press (45 Degree)', sets: '3', reps: '12-15', weight: 'Moderate', rest: '90s', instructions: 'Full depth without rounding' },
-          { name: 'Romanian Dumbbell Deadlifts', sets: '4', reps: '10-12', weight: 'Moderate', rest: '75s', instructions: 'Hinge hips backward' },
-          { name: 'Leg Curl Machine', sets: '3', reps: '15', weight: 'Moderate', rest: '60s', instructions: 'Control return' },
-          { name: 'Hanging Knee Raises', sets: '3', reps: '15-20', weight: 'Bodyweight', rest: '45s', instructions: 'Avoid swinging' },
-        ],
-      },
-      {
-        title: 'Day 4: Shoulders & Abs',
-        notes: 'Strict form overhead; protect rotator cuffs.',
-        exercises: [
-          { name: 'Seated Overhead Dumbbell Press', sets: '4', reps: '8-10', weight: 'Moderate', rest: '90s', instructions: 'Elbows slightly forward' },
-          { name: 'Dumbbell Lateral Raises', sets: '4', reps: '12-15', weight: 'Light', rest: '60s', instructions: 'Lead with elbows' },
-          { name: 'Face Pulls with Rope', sets: '4', reps: '15', weight: 'Light/Mod', rest: '60s', instructions: 'High elbows to eye level' },
-          { name: 'Plank Hold', sets: '3', reps: '60 sec', weight: 'Bodyweight', rest: '45s', instructions: 'Squeeze glutes and abs' },
-        ],
-      },
-    ],
-  },
-  default: {
-    name: 'K7 Total Conditioning & Fitness Split',
-    goal: 'Weight Loss & Conditioning',
-    level: 'All Levels',
-    description: 'Balanced full body resistance split with metabolic conditioning for optimal fat loss and body toning.',
-    days: [
-      {
-        title: 'Day 1: Upper Body Sculpt & Core',
-        notes: 'Keep rest intervals brisk to sustain elevated calorie burn.',
-        exercises: [
-          { name: 'Dumbbell Chest Press', sets: '3', reps: '12-15', weight: 'Moderate', rest: '60s', instructions: 'Shoulder blades back' },
-          { name: 'Seated Lat Pulldown', sets: '3', reps: '12-15', weight: 'Moderate', rest: '60s', instructions: 'Control eccentric' },
-          { name: 'Dumbbell Shoulder Press', sets: '3', reps: '12', weight: 'Moderate', rest: '60s', instructions: 'Full lockout overhead' },
-          { name: 'Bicycle Crunches', sets: '3', reps: '20', weight: 'Bodyweight', rest: '45s', instructions: 'Opposite elbow to knee' },
-        ],
-      },
-      {
-        title: 'Day 2: Lower Body Power & Glutes',
-        notes: 'Focus on hip drive and controlled tempo.',
-        exercises: [
-          { name: 'Goblet Squats with Dumbbell', sets: '4', reps: '12-15', weight: 'Moderate', rest: '60s', instructions: 'Weight in heels' },
-          { name: 'Dumbbell Romanian Deadlifts', sets: '3', reps: '12', weight: 'Moderate', rest: '60s', instructions: 'Hamstrings stretch' },
-          { name: 'Walking Lunges', sets: '3', reps: '12/leg', weight: 'Light/Mod', rest: '45s', instructions: 'Drive with lead leg' },
-          { name: 'Glute Bridges', sets: '3', reps: '15', weight: 'Moderate', rest: '45s', instructions: 'Squeeze at top' },
-        ],
-      },
-      {
-        title: 'Day 3: HIIT Cardio & Core Shred',
-        notes: 'Maximum energy expenditure day.',
-        exercises: [
-          { name: 'Kettlebell Swings', sets: '4', reps: '20', weight: 'Moderate', rest: '45s', instructions: 'Snap hips' },
-          { name: 'Mountain Climbers', sets: '4', reps: '30 sec', weight: 'Bodyweight', rest: '30s', instructions: 'Keep hips level' },
-          { name: 'Battle Ropes', sets: '4', reps: '30 sec', weight: 'Moderate', rest: '45s', instructions: 'Explosive effort' },
-          { name: 'Treadmill Interval Walk', sets: '1', reps: '15 min', weight: 'Cardio', rest: '—', instructions: 'Incline walk' },
-        ],
-      },
-    ],
-  },
-};
+import { ALL_WORKOUT_TEMPLATES } from '../../constants/workoutTemplatesCatalog';
+import {
+  getStoredWorkoutProgress,
+  saveStoredWorkoutProgress,
+} from '../../services/gamificationService';
 
 export default function MemberWorkout() {
   const { member } = useAuth();
@@ -120,6 +33,15 @@ export default function MemberWorkout() {
   const [activeDayIndex, setActiveDayIndex] = useState(0);
   const [completedExercises, setCompletedExercises] = useState({});
   const [viewMode, setViewMode] = useState('tracker'); // 'tracker' | 'chart'
+
+  // Load persisted exercise ticks
+  useEffect(() => {
+    if (!member?.id) return;
+    const stored = getStoredWorkoutProgress(member.id);
+    if (stored?.completedMap) {
+      setCompletedExercises(stored.completedMap);
+    }
+  }, [member?.id]);
 
   useEffect(() => {
     if (!member?.id) return;
@@ -148,7 +70,13 @@ export default function MemberWorkout() {
     };
   }, [member?.id]);
 
-  const displayedWorkout = workout || (member?.goal === 'muscle_building' ? SAMPLE_WORKOUTS.muscle_building : SAMPLE_WORKOUTS.default);
+  const fallbackWorkout =
+    (member?.goal === 'muscle_gain' || member?.goal === 'muscle_building'
+      ? ALL_WORKOUT_TEMPLATES.find((t) => t.id === 'wt-beg-weight-gain-6d')
+      : ALL_WORKOUT_TEMPLATES.find((t) => t.id === 'wt-beg-fat-loss-6d')) ||
+    ALL_WORKOUT_TEMPLATES[0];
+
+  const displayedWorkout = workout || fallbackWorkout;
   const isSample = !workout;
 
   const days = displayedWorkout.days || [];
@@ -156,15 +84,63 @@ export default function MemberWorkout() {
 
   const toggleExercise = (dayIdx, exIdx) => {
     const key = `${dayIdx}_${exIdx}`;
-    setCompletedExercises((prev) => ({
-      ...prev,
-      [key]: !prev[key],
-    }));
+    setCompletedExercises((prev) => {
+      const updated = {
+        ...prev,
+        [key]: !prev[key],
+      };
+
+      const totalExercisesDone = Object.values(updated).filter(Boolean).length;
+      let daysCleared = 0;
+      days.forEach((d, dI) => {
+        const dExercises = d.exercises || [];
+        if (dExercises.length > 0 && dExercises.every((_, eI) => updated[`${dI}_${eI}`])) {
+          daysCleared++;
+        }
+      });
+
+      saveStoredWorkoutProgress(member?.id, {
+        totalExercisesDone,
+        daysCleared,
+        completedMap: updated,
+      });
+
+      return updated;
+    });
+  };
+
+  const resetDayProgress = (dayIdx) => {
+    setCompletedExercises((prev) => {
+      const updated = { ...prev };
+      const dExercises = days[dayIdx]?.exercises || [];
+      dExercises.forEach((_, eI) => {
+        delete updated[`${dayIdx}_${eI}`];
+      });
+
+      const totalExercisesDone = Object.values(updated).filter(Boolean).length;
+      let daysCleared = 0;
+      days.forEach((d, dI) => {
+        const exs = d.exercises || [];
+        if (exs.length > 0 && exs.every((_, eI) => updated[`${dI}_${eI}`])) {
+          daysCleared++;
+        }
+      });
+
+      saveStoredWorkoutProgress(member?.id, {
+        totalExercisesDone,
+        daysCleared,
+        completedMap: updated,
+      });
+
+      return updated;
+    });
   };
 
   const currentDayExercises = currentDay?.exercises || [];
   const currentDayCompletedCount = currentDayExercises.filter((_, idx) => completedExercises[`${activeDayIndex}_${idx}`]).length;
   const progressPercent = currentDayExercises.length > 0 ? Math.round((currentDayCompletedCount / currentDayExercises.length) * 100) : 0;
+  const isDayCleared = currentDayExercises.length > 0 && currentDayCompletedCount === currentDayExercises.length;
+  const totalFinishedExercises = Object.values(completedExercises).filter(Boolean).length;
 
   return (
     <div className="space-y-4">
@@ -236,7 +212,7 @@ export default function MemberWorkout() {
 
           {/* Active Day Progress Header */}
           <div className="rounded-3xl border border-zinc-200/90 bg-white p-4 shadow-sm shadow-zinc-200/40">
-            <div className="flex items-center justify-between border-b border-zinc-100 pb-3 mb-3">
+            <div className="flex items-center justify-between border-b border-zinc-100 pb-3 mb-2.5">
               <div>
                 <h3 className="text-sm font-black text-zinc-950">{currentDay?.title}</h3>
                 {currentDay?.notes && (
@@ -244,12 +220,35 @@ export default function MemberWorkout() {
                 )}
               </div>
               <div className="text-right">
-                <span className="text-xs font-black text-red-600">
+                <span className="text-xs font-black text-red-600 font-mono">
                   {currentDayCompletedCount}/{currentDayExercises.length}
                 </span>
                 <span className="text-[0.65rem] text-zinc-400 block font-medium">Done</span>
               </div>
             </div>
+
+            {/* Dynamic Day Progress Bar */}
+            <div className="w-full bg-zinc-100 rounded-full h-1.5 mb-3 overflow-hidden">
+              <div
+                className="bg-gradient-to-r from-red-600 via-amber-500 to-emerald-500 h-1.5 rounded-full transition-all duration-300"
+                style={{ width: `${progressPercent}%` }}
+              />
+            </div>
+
+            {/* Day Cleared Achievement Celebration */}
+            {isDayCleared && (
+              <div className="mb-3 rounded-2xl bg-gradient-to-r from-amber-500/10 via-emerald-500/15 to-amber-500/10 border border-amber-300/80 p-3 text-center">
+                <div className="flex items-center justify-center gap-1.5">
+                  <Trophy className="size-4 text-amber-500" />
+                  <span className="text-xs font-black text-zinc-950 uppercase tracking-tight">
+                    Day Cleared! +30 Titan Points Earned!
+                  </span>
+                </div>
+                <p className="text-[0.68rem] text-zinc-600 mt-0.5">
+                  All {currentDayExercises.length} movements completed for today. Superb discipline!
+                </p>
+              </div>
+            )}
 
             {/* Exercise Checklist */}
             <div className="space-y-2">
@@ -277,9 +276,16 @@ export default function MemberWorkout() {
                       </div>
 
                       <div>
-                        <h4 className={`text-xs font-bold leading-tight ${done ? 'line-through text-zinc-400' : 'text-zinc-950'}`}>
-                          {ex.name}
-                        </h4>
+                        <div className="flex items-center gap-1.5">
+                          <h4 className={`text-xs font-bold leading-tight ${done ? 'line-through text-zinc-400' : 'text-zinc-950'}`}>
+                            {ex.name}
+                          </h4>
+                          {done && (
+                            <span className="inline-flex items-center gap-0.5 rounded bg-emerald-100 text-emerald-700 px-1 py-0.2 text-[0.6rem] font-black">
+                              <Sparkles className="size-2.5" /> +5 XP
+                            </span>
+                          )}
+                        </div>
                         {(ex.instructions || ex.duration) && (
                           <p className="mt-0.5 text-[0.65rem] text-zinc-500">
                             {[ex.instructions, ex.duration].filter(Boolean).join(' • ')}
@@ -301,6 +307,24 @@ export default function MemberWorkout() {
                   </div>
                 );
               })}
+            </div>
+
+            {/* Card Footer: Overall Stats & Reset */}
+            <div className="mt-3 pt-2.5 border-t border-zinc-100 flex items-center justify-between text-[0.68rem] text-zinc-500">
+              <div className="flex items-center gap-1.5">
+                <Flame className="size-3.5 text-red-500 fill-red-500" />
+                <span>Overall: <strong className="text-zinc-900 font-mono">{totalFinishedExercises} moves</strong> completed</span>
+              </div>
+              {currentDayCompletedCount > 0 && (
+                <button
+                  type="button"
+                  onClick={() => resetDayProgress(activeDayIndex)}
+                  className="flex items-center gap-1 text-[0.65rem] font-bold text-zinc-400 hover:text-red-600 transition cursor-pointer"
+                >
+                  <RotateCcw className="size-3" />
+                  Reset Day
+                </button>
+              )}
             </div>
           </div>
         </div>

@@ -43,6 +43,9 @@ import {
 } from '../../utils/dates';
 import { roundMoney } from '../../utils/format';
 import DailyQuoteBanner from '../../components/ui/DailyQuoteBanner';
+import AthleteRatingCard from '../../components/gamification/AthleteRatingCard';
+import StudioLeaderboardModal from '../../components/gamification/StudioLeaderboardModal';
+import { calculateAthleteScore, calculateAttendanceStreak, getStudioLeaderboard, getStoredWorkoutProgress } from '../../services/gamificationService';
 
 export default function MemberDashboard() {
   const { member } = useAuth();
@@ -51,7 +54,10 @@ export default function MemberDashboard() {
   const [workout, setWorkout] = useState(null);
   const [diet, setDiet] = useState(null);
   const [attendanceCount, setAttendanceCount] = useState(0);
+  const [allAttendance, setAllAttendance] = useState([]);
   const [todayAttendance, setTodayAttendance] = useState(null);
+  const [leaderboard, setLeaderboard] = useState([]);
+  const [leaderboardOpen, setLeaderboardOpen] = useState(false);
   const [attBusy, setAttBusy] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -91,11 +97,21 @@ export default function MemberDashboard() {
             }).catch(() => {});
           }
 
-          // Load monthly attendance
+          // Load monthly attendance & streak history (last 60 days)
           const now = new Date();
           const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
           listTraineeAttendance(member.id, firstDay, now).then((att) => {
             if (!cancelled) setAttendanceCount(att.length);
+          }).catch(() => {});
+
+          const streakStart = new Date(now.getTime() - 60 * 86400000);
+          listTraineeAttendance(member.id, streakStart, now).then((attList) => {
+            if (!cancelled) setAllAttendance(attList);
+          }).catch(() => {});
+
+          // Load live leaderboard
+          getStudioLeaderboard(fresh).then((lb) => {
+            if (!cancelled) setLeaderboard(lb);
           }).catch(() => {});
         }
 
@@ -175,10 +191,27 @@ export default function MemberDashboard() {
   const isCheckedIn = todayAttendance?.status === 'checked_in';
   const isCheckedOut = todayAttendance?.status === 'checked_out';
 
+  // Gamification metrics
+  const workoutProgress = getStoredWorkoutProgress(p?.id);
+  const streak = calculateAttendanceStreak(allAttendance);
+  const athleteScore = calculateAthleteScore(p, allAttendance, workoutProgress);
+  const userRankIdx = leaderboard.findIndex((m) => m.id === p?.id || m.isCurrent);
+  const currentRank = userRankIdx >= 0 ? userRankIdx + 1 : 1;
+  const totalMembers = leaderboard.length || 15;
+
   return (
     <div className="space-y-4">
       {/* 1. Daily Motivational Quote (Light Theme with energetic black & red badge) */}
       <DailyQuoteBanner theme="light" />
+
+      {/* 2. K7 Titan Athlete Rating & Gamification Widget */}
+      <AthleteRatingCard
+        score={athleteScore}
+        streak={streak}
+        rank={currentRank}
+        totalMembers={totalMembers}
+        onOpenLeaderboard={() => setLeaderboardOpen(true)}
+      />
 
       {/* 3. Daily Gym Visit Check-In / Check-Out Widget (Mobile-Native Touch Card) */}
       <div className="rounded-3xl border border-zinc-200/90 bg-white p-4 sm:p-5 shadow-sm shadow-zinc-200/50">
@@ -452,6 +485,13 @@ export default function MemberDashboard() {
         )}
       </div>
 
+      {/* Studio Leaderboard Modal */}
+      <StudioLeaderboardModal
+        isOpen={leaderboardOpen}
+        onClose={() => setLeaderboardOpen(false)}
+        members={leaderboard}
+        currentMemberId={p?.id}
+      />
     </div>
   );
 }

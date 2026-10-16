@@ -1,11 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
-import { Menu, Phone, X } from 'lucide-react';
+import { Menu, Phone, User, X } from 'lucide-react';
 import Logo from '../ui/Logo';
 import Button from '../ui/Button';
 import { useSectionHref, useSections } from '../../hooks/useSections';
 import { useScrollSpy } from '../../hooks/useScrollSpy';
 import { useContent } from '../../context/ContentContext';
 import { telLink } from '../../utils/format';
+
+const MEMBER_LOGIN_URL =
+  import.meta.env.VITE_ADMIN_URL
+    ? `${import.meta.env.VITE_ADMIN_URL.replace(/\/$/, '')}/login?portal=member`
+    : 'http://localhost:5174/login?portal=member';
 
 export default function Navbar() {
   const { nav } = useSections();
@@ -80,6 +85,13 @@ export default function Navbar() {
               <Phone className="size-4.5" />
             </a>
           )}
+          <a
+            href={MEMBER_LOGIN_URL}
+            className="hidden items-center gap-1.5 rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-xs font-bold tracking-wider text-white uppercase transition hover:border-brand hover:bg-brand/10 sm:inline-flex"
+          >
+            <User className="size-3.5 text-brand-bright" />
+            Member Login
+          </a>
           <Button href={href('contact')} className="hidden !px-5 !py-3 sm:inline-flex">
             Join now
           </Button>
@@ -145,6 +157,14 @@ export default function Navbar() {
             ))}
           </ul>
           <div className="space-y-3 border-t border-white/5 p-5">
+            <a
+              href={MEMBER_LOGIN_URL}
+              className="flex items-center justify-center gap-2 rounded-xl border border-brand/40 bg-brand/10 py-3 text-xs font-bold uppercase tracking-wider text-white hover:bg-brand/20 transition"
+              onClick={() => setOpen(false)}
+            >
+              <User className="size-4 text-brand-bright" />
+              Member Login
+            </a>
             <Button href={href('contact')} className="w-full" onClick={() => setOpen(false)}>
               Join now
             </Button>

@@ -1131,6 +1131,21 @@ export default function Login() {
                 )}
               </div>
             )}
+
+            {/* Company Credit */}
+            <div className="mt-8 pt-4 border-t border-zinc-100 text-center text-xs text-zinc-400">
+              <p>
+                Crafted By{' '}
+                <a
+                  href="https://www.legendaryone.in/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-bold text-yellow-500 hover:text-yellow-600 transition-colors underline decoration-yellow-500/40"
+                >
+                  Legendary One
+                </a>
+              </p>
+            </div>
           </div>
         </div>
       </div>

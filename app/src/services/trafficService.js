@@ -1,6 +1,8 @@
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { workoutService, dietService } from './planTemplateService';
+import { ALL_WORKOUT_TEMPLATES } from '../constants/workoutTemplatesCatalog';
+import { ALL_DIET_TEMPLATES } from '../constants/dietTemplatesCatalog';
 
 /**
  * Standard K7 Fitness Gym Hours & Time Slots
@@ -317,17 +319,19 @@ export const STARTER_DIET_TEMPLATES = [
 ];
 
 /**
- * Seed starter templates into Firestore if collection is empty
+ * Seed starter templates into Firestore idempotently
  */
 export async function seedStarterTemplatesIfEmpty(kind = 'workout') {
   try {
     const service = kind === 'workout' ? workoutService : dietService;
-    const existing = await service.listTemplates(5);
-    if (existing.length > 0) return false;
+    const existing = await service.listTemplates(50);
 
-    const templatesToSeed = kind === 'workout' ? STARTER_WORKOUT_TEMPLATES : STARTER_DIET_TEMPLATES;
+    const templatesToSeed = kind === 'workout' ? ALL_WORKOUT_TEMPLATES : ALL_DIET_TEMPLATES;
     for (const t of templatesToSeed) {
-      await service.createTemplate(t);
+      const alreadyExists = existing.some((ex) => ex.name.toLowerCase() === t.name.toLowerCase());
+      if (!alreadyExists) {
+        await service.createTemplate(t);
+      }
     }
     return true;
   } catch (err) {

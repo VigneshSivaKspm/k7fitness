@@ -32,6 +32,13 @@ import { formatPhone, roundMoney } from '../../utils/format';
 import { daysUntil, formatDate } from '../../utils/dates';
 import { FITNESS_GOALS, fitnessGoalLabel } from '../../constants/options';
 import { calculateBmi, cmToFeetInches } from '../../utils/fitness';
+import BadgesShelf from '../../components/gamification/BadgesShelf';
+import {
+  getTierInfo,
+  calculateAthleteScore,
+  calculateAttendanceStreak,
+  getStoredWorkoutProgress,
+} from '../../services/gamificationService';
 
 export default function MemberProfile() {
   const { member, logout, updateMemberSession } = useAuth();
@@ -77,7 +84,14 @@ export default function MemberProfile() {
   const isExpiringSoon = daysLeft !== null && daysLeft >= 0 && daysLeft <= 7;
   const isActive = daysLeft !== null && daysLeft >= 0;
 
+  // Gamification metrics
+  const workoutProgress = getStoredWorkoutProgress(member?.id);
+  const athleteScore = calculateAthleteScore(member, allAttendance, workoutProgress);
+  const streak = calculateAttendanceStreak(allAttendance);
+  const tier = getTierInfo(athleteScore);
+
   const [attendanceCount, setAttendanceCount] = useState(0);
+  const [allAttendance, setAllAttendance] = useState([]);
 
   useEffect(() => {
     if (!member?.id) return;
@@ -89,6 +103,14 @@ export default function MemberProfile() {
         if (!cancelled) setAttendanceCount(att.length);
       })
       .catch(() => {});
+
+    const streakStart = new Date(now.getTime() - 60 * 86400000);
+    listTraineeAttendance(member.id, streakStart, now)
+      .then((attList) => {
+        if (!cancelled) setAllAttendance(attList);
+      })
+      .catch(() => {});
+
     return () => {
       cancelled = true;
     };
@@ -494,6 +516,42 @@ export default function MemberProfile() {
           <Pencil className="size-3.5" />
           Update Body Stats & Goals
         </button>
+      </div>
+
+      {/* Gamification Division & Badges Cabinet */}
+      <div className="space-y-3">
+        <div className="rounded-3xl border border-zinc-200/90 bg-gradient-to-r from-zinc-950 to-zinc-900 p-4 sm:p-5 text-white shadow-sm flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <span className="flex size-11 items-center justify-center rounded-2xl bg-white/10 text-2xl border border-white/10">
+              {tier.icon}
+            </span>
+            <div>
+              <div className="flex items-center gap-1.5">
+                <span className="text-[0.65rem] font-black uppercase tracking-wider text-red-400">
+                  Athlete Tier
+                </span>
+                <span className="text-zinc-500 font-mono text-[0.65rem]">• {streak}d streak</span>
+              </div>
+              <h3 className="text-sm font-black text-white">{tier.name}</h3>
+              <p className="text-[0.68rem] text-zinc-400 mt-0.5 font-mono">
+                {athleteScore} / 1000 PTS
+              </p>
+            </div>
+          </div>
+          <Link
+            to="/member/dashboard"
+            className="rounded-xl bg-red-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-red-700 transition shrink-0"
+          >
+            Arena →
+          </Link>
+        </div>
+
+        {/* Trophies & Badges Grid */}
+        <BadgesShelf
+          trainee={member}
+          attendanceList={allAttendance}
+          workoutStats={workoutProgress}
+        />
       </div>
 
       {/* Security & Password Card */}

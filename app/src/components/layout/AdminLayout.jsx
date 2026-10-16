@@ -131,6 +131,21 @@ export default function AdminLayout() {
 
         <main className="mx-auto w-full max-w-[1400px] px-4 pt-4 pb-[calc(var(--tabbar-h)+var(--sa-bottom)+2rem)] sm:px-6 lg:px-8 lg:pt-7 lg:pb-12">
           <Outlet />
+
+          {/* Company Credit */}
+          <footer className="mt-12 pt-6 border-t border-zinc-200/80 text-center text-xs text-zinc-500">
+            <p>
+              Crafted By{' '}
+              <a
+                href="https://www.legendaryone.in/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-bold text-yellow-500 hover:text-yellow-600 transition-colors underline decoration-yellow-500/40"
+              >
+                Legendary One
+              </a>
+            </p>
+          </footer>
         </main>
       </div>
 

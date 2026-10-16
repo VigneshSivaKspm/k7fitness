@@ -20,6 +20,7 @@ import { useAuth } from '../../context/AuthContext';
 import { getTrainee } from '../../services/traineeService';
 import { dietService } from '../../services/planTemplateService';
 import { fitnessGoalLabel } from '../../constants/options';
+import { ALL_DIET_TEMPLATES } from '../../constants/dietTemplatesCatalog';
 
 // Built-in goal-based sample food charts for instant demonstration if none assigned yet
 const SAMPLE_DIETS = {
@@ -179,7 +180,13 @@ export default function MemberDiet() {
     };
   }, [member?.id]);
 
-  const displayedDiet = diet || (member?.goal === 'muscle_building' ? SAMPLE_DIETS.muscle_building : SAMPLE_DIETS.default);
+  const fallbackDiet =
+    (member?.goal === 'muscle_gain' || member?.goal === 'muscle_building'
+      ? ALL_DIET_TEMPLATES.find((t) => t.id === 'dt-tn-weight-gain-6d')
+      : ALL_DIET_TEMPLATES.find((t) => t.id === 'dt-tn-fat-loss-6d')) ||
+    ALL_DIET_TEMPLATES[0];
+
+  const displayedDiet = diet || fallbackDiet;
   const meals = displayedDiet.meals || [];
 
   const toggleSlot = (idx) => {
