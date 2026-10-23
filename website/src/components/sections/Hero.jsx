@@ -39,15 +39,11 @@ export default function Hero() {
       ) : (
         <div className="absolute inset-0 -z-10" aria-hidden="true">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_75%_40%,rgb(161_8_37/0.28),transparent_55%)]" />
-          <svg
-            viewBox="0 0 128 120"
-            className="absolute top-1/2 right-[-18%] h-[85%] -translate-y-1/2 opacity-[0.07] sm:right-[-6%] lg:right-[2%]"
-          >
-            <polygon points="8,16 27,16 27,104 8,104" fill="#fff" />
-            <polygon points="27,58 56,16 77,16 41,68" fill="#fff" />
-            <polygon points="39,62 52,52 78,104 57,104" fill="#fff" />
-            <polygon points="74,16 124,16 124,30 98,104 78,104 102,32 70,32" fill="#d20a35" />
-          </svg>
+          <img
+            src="/icons/banner.png"
+            alt=""
+            className="pointer-events-none absolute top-1/2 right-[-10%] h-[75%] max-w-2xl -translate-y-1/2 object-contain opacity-20 sm:right-[2%]"
+          />
         </div>
       )}
       <div className="grain pointer-events-none absolute inset-0 -z-10 opacity-[0.06] mix-blend-overlay" aria-hidden="true" />

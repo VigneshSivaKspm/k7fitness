@@ -9,6 +9,7 @@ export default function NotFound() {
 
   return (
     <main className="flex min-h-[100svh] flex-col items-center justify-center px-4 text-center">
+      <img src="/icons/logo.png" alt="K7 Fitness" className="mb-4 h-16 w-auto object-contain drop-shadow" />
       <p className="font-display text-[9rem] leading-none text-brand">404</p>
       <h1 className="display-title text-4xl sm:text-5xl">This page skipped leg day</h1>
       <p className="mt-3 max-w-md text-muted">The page you’re looking for doesn’t exist or has moved.</p>

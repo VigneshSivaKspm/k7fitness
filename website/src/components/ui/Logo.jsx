@@ -22,7 +22,7 @@ export default function Logo({ size = 'md', showText = true, className = '' }) {
 
   return (
     <span className={`inline-flex items-center gap-3 ${className}`}>
-      <img src="/brand/k7-mark.svg" alt="" aria-hidden="true" className={`${h} w-auto`} />
+      <img src="/icons/logo.png" alt="K7" aria-hidden="true" className={`${h} w-auto object-contain`} />
       {showText && (
         <span className="flex flex-col leading-none">
           <span className="font-display text-2xl tracking-wider text-snow">

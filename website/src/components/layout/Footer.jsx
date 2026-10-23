@@ -69,9 +69,20 @@ export default function Footer() {
         )}
       </div>
       <div className="border-t border-white/5">
-        <div className="container-k7 flex flex-col items-center justify-between gap-2 py-6 text-xs text-muted sm:flex-row">
+        <div className="container-k7 flex flex-col items-center justify-between gap-3 py-6 text-xs text-muted sm:flex-row">
           <p>
             © {year} {contact.gymName}. All rights reserved.
+          </p>
+          <p className="text-xs text-muted">
+            Crafted By{' '}
+            <a
+              href="https://www.legendaryone.in/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-bold text-yellow-400 hover:text-yellow-300 transition-colors underline decoration-yellow-400/40 hover:decoration-yellow-300"
+            >
+              Legendary One
+            </a>
           </p>
           <div className="flex items-center gap-5">
             <Link to="/privacy" className="transition hover:text-white">

@@ -246,7 +246,7 @@ export const DEFAULT_OFFERS = [
 export const DEFAULT_CONTACT = {
   gymName: 'K7 Fitness Studio & Gym',
   tagline: 'Fitness Studio & Gym',
-  logoUrl: '',
+  logoUrl: '/icons/logo.png',
   phone: '+91 98765 43210',
   whatsapp: '+91 98765 43210',
   email: 'contact@k7fitness.in',
